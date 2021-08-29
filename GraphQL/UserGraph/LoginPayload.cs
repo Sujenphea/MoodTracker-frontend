@@ -3,9 +3,7 @@ using MoodTracker.Models;
 
 namespace MoodTracker.GraphQL.UserGraph
 {
-    public record AddUserInput
-    (
-        string Name,
-        string GitHub
-    );
+    public record LoginPayload(
+        User user,
+        string jwt);
 }

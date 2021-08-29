@@ -5,7 +5,6 @@ namespace MoodTracker.GraphQL.DailyGraph
 {
     public record AddDailyInput
     (
-        string Summary,
-        int UserId
+        string Summary
     );
 }

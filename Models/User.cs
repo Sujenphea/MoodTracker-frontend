@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace MoodTracker.Models
@@ -15,5 +16,10 @@ namespace MoodTracker.Models
         public string? GitHub { get; set; }
 
         public ICollection<Daily> Dailies { get; set; } = new List<Daily>();
+
+        public static implicit operator Octokit.User(User v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
