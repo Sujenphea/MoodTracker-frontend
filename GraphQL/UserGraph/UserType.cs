@@ -18,6 +18,7 @@ namespace MoodTracker.GraphQL
         {
             descriptor.Field(s => s.Id).Type<NonNullType<IdType>>();
             descriptor.Field(s => s.Name).Type<NonNullType<StringType>>();
+            descriptor.Field(s => s.GitHub).Type<NonNullType<StringType>>();
 
             descriptor
                 .Field(s => s.Dailies)

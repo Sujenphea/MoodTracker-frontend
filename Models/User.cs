@@ -11,6 +11,9 @@ namespace MoodTracker.Models
         [Required]
         public string? Name { get; set; }
 
+        [Required]
+        public string? GitHub { get; set; }
+
         public ICollection<Daily> Dailies { get; set; } = new List<Daily>();
     }
 }

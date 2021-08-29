@@ -16,7 +16,8 @@ namespace MoodTracker.GraphQL.UserGraph
         public async Task<User> AddUserAsync(AddUserInput input, [ScopedService] AppDbContext context, CancellationToken cancellationToken)
         {
             var user = new User {
-                Name = input.Name
+                Name = input.Name,
+                GitHub = input.GitHub
             };
 
             context.Users.Add(user);

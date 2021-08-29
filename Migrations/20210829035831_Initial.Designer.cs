@@ -9,7 +9,7 @@ using MoodTracker.Data;
 namespace MoodTracker.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20210829032236_Initial")]
+    [Migration("20210829035831_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,6 +47,10 @@ namespace MoodTracker.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("GitHub")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

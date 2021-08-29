@@ -5,6 +5,7 @@ namespace MoodTracker.GraphQL.UserGraph
 {
     public record AddUserInput
     (
-        string Name
+        string Name,
+        string GitHub
     );
 }
