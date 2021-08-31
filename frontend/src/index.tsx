@@ -1,21 +1,35 @@
-import React, { useEffect } from "react";
-import { BrowserRouter as Router, useLocation } from "react-router-dom";
-import ReactDOM from "react-dom";
+import React from "react";
 import {
-  ApolloClient,
-  ApolloProvider,
-  gql,
-  InMemoryCache,
-  useMutation,
-} from "@apollo/client";
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from "react-router-dom";
+import ReactDOM from "react-dom";
+import { ApolloProvider, useQuery } from "@apollo/client";
 import graphQLClient from "./GraphQLClient";
-import { LOGIN } from "./api/mutations";
-import { Login } from "./api/__generated__/Login";
 import { Home } from "./Pages/Home";
+import "./index.css";
+import { Header } from "./stories/Header/Header";
+import { SELF } from "./api/queries";
+import { Self } from "./api/__generated__/Self";
+import { DailyGrid } from "./Pages/Daily/DailyGrid";
 // import * as serviceWorker from "./../archive/serviceWorker";
 
 const Index = () => {
-  return <div>{Home()}</div>;
+  const { loading, error, data } = useQuery<Self>(SELF);
+  return (
+    <div>
+      <Header user={data?.self} />
+      <Switch>
+        <Route exact path="/">
+          <Redirect to="/home" />
+        </Route>
+        <Route path="/home" render={() => <Home />} />
+        <Route path="/thoughts" render={() => <DailyGrid />} />
+      </Switch>
+    </div>
+  );
 };
 
 ReactDOM.render(

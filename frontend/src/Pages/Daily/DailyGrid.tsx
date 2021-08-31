@@ -1,33 +1,29 @@
 import { useQuery } from "@apollo/client";
-import React from "react";
+import React, { useState } from "react";
+import { useEffect } from "react";
 import { DAILIES } from "../../api/queries";
 import {
   Dailies,
   Dailies_dailies_nodes,
 } from "../../api/__generated__/Dailies";
+import { IsToday } from "../../helpers/Date";
 import { DailyGridItem } from "./DailyGridItem";
+import { TodayGridItem } from "./TodayGridItem";
 
 export const DailyGrid = () => {
   const { loading, error, data } = useQuery<Dailies>(DAILIES);
-  if (loading) {
-    console.log("loading");
-  }
+  const [writtenToday, setWrittenToday] = useState(false);
 
-  if (error) {
-    console.log("client", error.clientErrors);
-    console.log("graphQLErrors", error.graphQLErrors);
-    console.log("extraInfo", error.extraInfo);
-    console.log("name", error.name);
-    console.log("message", error.message);
-    console.log("networkError", error.networkError);
-  }
-
-  if (data) {
-    if (data.dailies) {
-      if (data.dailies.nodes) {
-      }
+  useEffect(() => {
+    if (loading || error || !data || !data!.dailies || !data!.dailies!.nodes) {
+      return;
     }
-  }
+
+    if (IsToday(data.dailies.nodes[0].dateCreated)) {
+      setWrittenToday(true);
+    }
+  }, [data]);
+
   const getGrid = (): JSX.Element[] => {
     if (loading || error || !data || !data!.dailies || !data!.dailies!.nodes) {
       return [];
@@ -36,8 +32,13 @@ export const DailyGrid = () => {
     let res: JSX.Element[] = [];
 
     data.dailies.nodes.map((daily: Dailies_dailies_nodes) => {
+      // if (i === 0 && IsToday(daily.dateCreated)) {
+      //   setWrittenToday(true);
+      // }
+
       res = res.concat(
         <DailyGridItem
+          key={Number.parseInt(daily.id)}
           id={Number.parseInt(daily.id)}
           summary={daily.summary}
           dateCreated={daily.dateCreated}
@@ -58,9 +59,11 @@ export const DailyGrid = () => {
         rowGap: "30px",
         border: "1px solid blue",
         // gridTemplateRows: "minmax(300px, auto)",
-        gridTemplateColumns: "minmax(50%, auto)" /* width */,
+        gridTemplateColumns: "50%" /* width */,
       }}
     >
+      {writtenToday ? <div></div> : <TodayGridItem />}
+
       {getGrid()}
       {/* <DailyGridItem id={1} summary={"hello"} /> */}
     </div>

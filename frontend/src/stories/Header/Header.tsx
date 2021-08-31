@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     appBar: {
       backgroundColor: "#676767",
-      minHeight: "65px",
+      height: "65px",
     },
     title: {
       display: "flex",
@@ -109,9 +109,9 @@ export const Header: React.FC<HeaderProps> = ({ user }) => {
             </Button>
           ) : (
             <div className={classes.userInformation}>
-              <Avatar alt="user-avatar" />
               <Button color="inherit" href="/submit">
-                {user.name}
+                <Avatar alt="user-avatar" />
+                {/* {user.name} */}
               </Button>
             </div>
           )}
