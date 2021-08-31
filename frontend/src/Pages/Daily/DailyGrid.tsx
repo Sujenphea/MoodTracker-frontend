@@ -32,10 +32,6 @@ export const DailyGrid = () => {
     let res: JSX.Element[] = [];
 
     data.dailies.nodes.map((daily: Dailies_dailies_nodes) => {
-      // if (i === 0 && IsToday(daily.dateCreated)) {
-      //   setWrittenToday(true);
-      // }
-
       res = res.concat(
         <DailyGridItem
           key={Number.parseInt(daily.id)}
@@ -56,16 +52,14 @@ export const DailyGrid = () => {
         gridColumn: "1",
         alignItems: "center",
         justifyContent: "center",
-        rowGap: "30px",
+        rowGap: "20px",
         border: "1px solid blue",
-        // gridTemplateRows: "minmax(300px, auto)",
         gridTemplateColumns: "50%" /* width */,
       }}
     >
       {writtenToday ? <div></div> : <TodayGridItem />}
 
       {getGrid()}
-      {/* <DailyGridItem id={1} summary={"hello"} /> */}
     </div>
   );
 };

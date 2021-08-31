@@ -62,7 +62,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const CLIENT_ID = "9c00f9b1edf177359d2d";
-const REDIRECT_URI = "http://localhost:8000/";
 
 export const Header: React.FC<HeaderProps> = ({ user }) => {
   const classes = useStyles();

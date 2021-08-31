@@ -45,7 +45,7 @@ export const TodayGridItem = () => {
         border: "1px solid black",
         minWidth: "100%",
         maxWidth: "100%",
-        // height: "500px",
+        minHeight: "200px",
         padding: "0px 20px",
         marginTop: "30px",
       }}

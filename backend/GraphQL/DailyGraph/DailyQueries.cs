@@ -15,7 +15,14 @@ namespace MoodTracker.GraphQL.DailyGraph
         [UsePaging]
         public IQueryable<Daily> GetDailies([ScopedService] AppDbContext context)
         {
-            return context.Dailies.OrderByDescending(s => s.DateCreated);
+            return context.Dailies.OrderByDescending(s => s.DateCreated.Substring(6, 10)).ThenByDescending(s => s.DateCreated.Substring(3,5)).ThenByDescending(s => s.DateCreated.Substring(0,2));
+        }
+
+        [UseAppDbContext]
+        [UsePaging]
+        public IQueryable<Daily> GetDailiesByUserId(int id, [ScopedService] AppDbContext context)
+        {
+            return context.Dailies.Where(s => s.UserId == id).OrderByDescending(s => s.DateCreated.Substring(6, 10)).ThenByDescending(s => s.DateCreated.Substring(3, 5)).ThenByDescending(s => s.DateCreated.Substring(0, 2));
         }
 
         [UseAppDbContext]
