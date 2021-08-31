@@ -28,6 +28,7 @@ export const DAILIES = gql`
     dailies {
       nodes {
         summary
+        dateCreated
         id
         user {
           id

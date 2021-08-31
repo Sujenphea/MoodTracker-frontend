@@ -13,9 +13,9 @@ export const LOGIN = gql`
   ${fragments.USER}
 `;
 
-export const EDIT_USER = gql`
-  mutation EditUser($name: String) {
-    editUser(input: { name: $name }) {
+export const EDIT_SELF = gql`
+  mutation EditSelf($name: String) {
+    editSelf(input: { name: $name }) {
       ...userFields
     }
   }

@@ -46,7 +46,7 @@ export interface Dailies_dailies_nodes {
   __typename: "Daily";
   id: string;
   summary: string;
-  created: any;
+  dateCreated: any;
   user: Dailies_dailies_nodes_user;
 }
 

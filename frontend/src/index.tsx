@@ -1,24 +1,21 @@
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, useLocation } from "react-router-dom";
 import ReactDOM from "react-dom";
 import {
   ApolloClient,
   ApolloProvider,
   gql,
   InMemoryCache,
+  useMutation,
 } from "@apollo/client";
 import graphQLClient from "./GraphQLClient";
-import { Sample } from "./sample";
+import { LOGIN } from "./api/mutations";
+import { Login } from "./api/__generated__/Login";
+import { Home } from "./Pages/Home";
 // import * as serviceWorker from "./../archive/serviceWorker";
 
 const Index = () => {
-  process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-  return (
-    <div>
-      <div>Hello World</div>
-      {Sample()}
-    </div>
-  );
+  return <div>{Home()}</div>;
 };
 
 ReactDOM.render(

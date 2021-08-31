@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace MoodTracker.Models
 {
@@ -14,5 +15,7 @@ namespace MoodTracker.Models
         public int UserId { get; set; }
 
         public User User { get; set; } = null!;
+
+        public DateTime DateCreated { get; set; }
     }
 }

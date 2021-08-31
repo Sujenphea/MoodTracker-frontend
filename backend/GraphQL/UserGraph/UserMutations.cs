@@ -25,7 +25,7 @@ namespace MoodTracker.GraphQL.UserGraph
     {
         [UseAppDbContext]
         [Authorize]
-        public async Task<User> EditUserAsync(EditUserInput input, ClaimsPrincipal claimsPrincipal,
+        public async Task<User> EditSelfAsync(EditSelfInput input, ClaimsPrincipal claimsPrincipal,
         [ScopedService] AppDbContext context, CancellationToken cancellationToken)
         {
             var userIdStr = claimsPrincipal.Claims.First(c => c.Type == "userId").Value;

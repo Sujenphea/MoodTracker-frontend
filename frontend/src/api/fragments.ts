@@ -12,7 +12,7 @@ export const DAILY = gql`
   fragment dailyFields on Daily {
     id
     summary
-    created
+    dateCreated
   }
 `;
 
