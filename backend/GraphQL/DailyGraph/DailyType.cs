@@ -17,7 +17,7 @@ namespace MoodTracker.GraphQL.DailyGraph
         {
             descriptor.Field(s => s.Id).Type<NonNullType<IdType>>();
             descriptor.Field(s => s.Summary).Type<NonNullType<StringType>>();
-            descriptor.Field(s => s.DateCreated).Type<NonNullType<DateTimeType>>();
+            descriptor.Field(s => s.DateCreated).Type<NonNullType<StringType>>();
 
             descriptor
                 .Field(s => s.User)

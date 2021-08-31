@@ -26,7 +26,7 @@ namespace MoodTracker.GraphQL.DailyGraph
             {
                 Summary = input.Summary,
                 UserId = int.Parse(userIdStr),
-                DateCreated = DateTime.Now
+                DateCreated = DateTime.Now.ToString("dd.MM.yyyy")
             };
 
             context.Dailies.Add(daily);
