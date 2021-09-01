@@ -6,23 +6,28 @@ import { Dailies, Dailies_dailies_nodes } from "../api/__generated__/Dailies";
 import { IsToday } from "../helpers/Date";
 import { GridItem } from "../stories/GridItem/GridItem";
 
-export const DailyGrid = () => {
-  const { loading, error, data, refetch } = useQuery<Dailies>(DAILIES);
+interface DailyGridProps {
+  data: Dailies | undefined;
+  refetchData: () => void;
+}
+
+export const DailyGrid = (props: DailyGridProps) => {
+  // const { loading, error, data, refetch } = useQuery<Dailies>(DAILIES);
   const [writtenToday, setWrittenToday] = useState(false);
   const [dailies, setDailies] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
-    if (loading || error || !data || !data!.dailies || !data!.dailies!.nodes) {
+    if (!props.data || !props.data.dailies || !props.data.dailies.nodes) {
       return;
     }
 
-    if (IsToday(data.dailies.nodes[0].dateCreated)) {
+    if (IsToday(props.data.dailies.nodes[0].dateCreated)) {
       setWrittenToday(true);
     }
 
     let res: JSX.Element[] = [];
 
-    data.dailies.nodes.map((daily: Dailies_dailies_nodes) => {
+    props.data.dailies.nodes.map((daily: Dailies_dailies_nodes) => {
       res = res.concat(
         <GridItem
           key={Number.parseInt(daily.id)}
@@ -34,7 +39,7 @@ export const DailyGrid = () => {
     });
 
     setDailies(res);
-  }, [data]);
+  }, [props.data]);
 
   return (
     <div
@@ -55,7 +60,7 @@ export const DailyGrid = () => {
           <GridItem
             isToday={true}
             isEditing={true}
-            didSubmit={() => refetch()}
+            didSubmit={() => props.refetchData()}
           />
         </div>
       )}

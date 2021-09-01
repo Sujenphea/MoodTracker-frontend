@@ -10,7 +10,7 @@ import { ApolloProvider, useQuery } from "@apollo/client";
 import graphQLClient from "./GraphQLClient";
 
 import { Header } from "./stories/Header/Header";
-import { SELF } from "./api/queries";
+import { DAILIES, SELF } from "./api/queries";
 import { Self } from "./api/__generated__/Self";
 import { DailyGrid } from "./pages/DailyGrid";
 // import * as serviceWorker from "./../archive/serviceWorker";
@@ -18,9 +18,22 @@ import "./styles/sanitise.css";
 import "./styles/globals.css";
 import { motion } from "framer-motion";
 import { Home } from "./stories/Home/Home";
+import { Dailies } from "./api/__generated__/Dailies";
 
 const Index = () => {
-  const { loading, error, data } = useQuery<Self>(SELF);
+  const {
+    loading: sloading,
+    error: serror,
+    data: sdata,
+  } = useQuery<Self>(SELF);
+
+  const {
+    loading: dloading,
+    error: derror,
+    data: ddata,
+    refetch,
+  } = useQuery<Dailies>(DAILIES);
+
   return (
     <div>
       <motion.div
@@ -36,13 +49,18 @@ const Index = () => {
         }}
       >
         {/* <Provider store={store}> */}
-        <Header user={data?.self} />
+        <Header user={sdata?.self} />
         <Switch>
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
           <Route path="/home" render={() => <Home />} />
-          <Route path="/thoughts" render={() => <DailyGrid />} />
+          <Route
+            path="/thoughts"
+            render={() => (
+              <DailyGrid data={ddata} refetchData={() => refetch()} />
+            )}
+          />
         </Switch>
         {/* </Provider> */}
       </motion.div>
