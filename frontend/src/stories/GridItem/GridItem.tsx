@@ -13,6 +13,7 @@ export interface GridItemProps {
   dateCreated?: string;
   isEditing?: boolean;
   isToday?: boolean;
+  didSubmit?: () => void;
 }
 
 export const GridItem = (props: GridItemProps) => {
@@ -35,25 +36,29 @@ export const GridItem = (props: GridItemProps) => {
 
   const handleSubmit = async () => {
     if (currentText === "" || currentText === props.summary) {
+      setIsEditing(false);
       return;
     }
 
     if (props.isToday && props.summary === undefined) {
-      try {
-        await addDaily({
-          variables: {
-            summary: currentText,
-          },
+      addDaily({
+        variables: {
+          summary: currentText,
+        },
+      })
+        .then(() => {
+          if (props.didSubmit) {
+            props.didSubmit();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
         });
-      } catch (e) {
-        console.log(e);
-      }
 
       setIsEditing(false);
       return;
     }
 
-    console.log("editDaily");
     try {
       editDaily({
         variables: {

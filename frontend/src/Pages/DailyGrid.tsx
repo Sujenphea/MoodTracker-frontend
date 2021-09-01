@@ -1,5 +1,4 @@
 import { useQuery } from "@apollo/client";
-import { Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { DAILIES } from "../api/queries";
@@ -8,9 +7,9 @@ import { IsToday } from "../helpers/Date";
 import { GridItem } from "../stories/GridItem/GridItem";
 
 export const DailyGrid = () => {
-  const { loading, error, data } = useQuery<Dailies>(DAILIES);
+  const { loading, error, data, refetch } = useQuery<Dailies>(DAILIES);
   const [writtenToday, setWrittenToday] = useState(false);
-  // const [dailies, setDailies] = useState()
+  const [dailies, setDailies] = useState<JSX.Element[]>([]);
 
   useEffect(() => {
     if (loading || error || !data || !data!.dailies || !data!.dailies!.nodes) {
@@ -19,12 +18,6 @@ export const DailyGrid = () => {
 
     if (IsToday(data.dailies.nodes[0].dateCreated)) {
       setWrittenToday(true);
-    }
-  }, [data]);
-
-  const getGrid = (): JSX.Element[] => {
-    if (loading || error || !data || !data!.dailies || !data!.dailies!.nodes) {
-      return [];
     }
 
     let res: JSX.Element[] = [];
@@ -40,8 +33,8 @@ export const DailyGrid = () => {
       );
     });
 
-    return res;
-  };
+    setDailies(res);
+  }, [data]);
 
   return (
     <div
@@ -59,11 +52,15 @@ export const DailyGrid = () => {
         <div></div>
       ) : (
         <div style={{ marginTop: "20px" }}>
-          <GridItem isToday={true} isEditing={true} />
+          <GridItem
+            isToday={true}
+            isEditing={true}
+            didSubmit={() => refetch()}
+          />
         </div>
       )}
 
-      {getGrid()}
+      {dailies}
     </div>
   );
 };
