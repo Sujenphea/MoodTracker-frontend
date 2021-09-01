@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { useHistory, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { Self_self } from "../../api/__generated__/Self";
 import { LOGIN } from "../../api/mutations";
@@ -60,7 +60,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const CLIENT_ID = "9c00f9b1edf177359d2d";
 
 export const Header: React.FC<HeaderProps> = ({ user }) => {
-  const history = useHistory();
   const classes = useStyles();
   const query = useQuery();
   const [login] = useMutation<Login>(LOGIN);
@@ -78,10 +77,10 @@ export const Header: React.FC<HeaderProps> = ({ user }) => {
         } catch (e) {
           console.log(e);
         }
-        history.push("/home");
       }
     };
     loginMethod();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

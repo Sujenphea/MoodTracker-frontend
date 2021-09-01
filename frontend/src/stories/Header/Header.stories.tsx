@@ -1,10 +1,18 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
 import { Header, HeaderProps } from "./Header";
+import { MemoryRouter } from "react-router-dom";
 
 export default {
   title: "UI Components/Header",
   component: Header,
+  decorators: [
+    (Story) => (
+      <MemoryRouter>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
 } as Meta;
 
 const Template: Story<HeaderProps> = (args) => <Header {...args} />;

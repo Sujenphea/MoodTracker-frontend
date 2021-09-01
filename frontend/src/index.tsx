@@ -8,16 +8,16 @@ import {
 import ReactDOM from "react-dom";
 import { ApolloProvider, useQuery } from "@apollo/client";
 import graphQLClient from "./GraphQLClient";
-import { Home } from "./Pages/Home";
 
 import { Header } from "./stories/Header/Header";
 import { SELF } from "./api/queries";
 import { Self } from "./api/__generated__/Self";
-import { DailyGrid } from "./Pages/DailyGrid";
+import { DailyGrid } from "./pages/DailyGrid";
 // import * as serviceWorker from "./../archive/serviceWorker";
 import "./styles/sanitise.css";
 import "./styles/globals.css";
 import { motion } from "framer-motion";
+import { Home } from "./stories/Home/Home";
 
 const Index = () => {
   const { loading, error, data } = useQuery<Self>(SELF);
@@ -35,6 +35,7 @@ const Index = () => {
           },
         }}
       >
+        {/* <Provider store={store}> */}
         <Header user={data?.self} />
         <Switch>
           <Route exact path="/">
@@ -43,6 +44,7 @@ const Index = () => {
           <Route path="/home" render={() => <Home />} />
           <Route path="/thoughts" render={() => <DailyGrid />} />
         </Switch>
+        {/* </Provider> */}
       </motion.div>
     </div>
   );
