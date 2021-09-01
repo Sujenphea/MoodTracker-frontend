@@ -1,20 +1,31 @@
+import React, { Props, useState } from "react";
+import { IconButton } from "@material-ui/core";
 import { useMutation } from "@apollo/client";
-import React from "react";
-import { useState } from "react";
-import { EDIT_DAILY } from "../../api/mutations";
+import { ADD_DAILY, EDIT_DAILY } from "../../api/mutations";
 import { EditDaily } from "../../api/__generated__/EditDaily";
-import { convertDate } from "../../helpers/Date";
+import { convertDate, getDateToday } from "../../helpers/Date";
+import { useEffect } from "react";
+import { AddDaily } from "../../api/__generated__/AddDaily";
 
-interface DailyGridItemProps {
-  id: number;
-  summary: string;
-  dateCreated: string;
+export interface GridItemProps {
+  id?: number;
+  summary?: string;
+  dateCreated?: string;
+  isEditing?: boolean;
+  isToday?: boolean;
 }
 
-export const DailyGridItem = (props: DailyGridItemProps) => {
+export const GridItem = (props: GridItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentText, setCurrentText] = useState(props.summary);
   const [editDaily] = useMutation<EditDaily>(EDIT_DAILY);
+  const [addDaily] = useMutation<AddDaily>(ADD_DAILY);
+
+  useEffect(() => {
+    if (props.isEditing) {
+      setIsEditing(true);
+    }
+  }, [props.isEditing]);
 
   const handleEdit = () => {
     setIsEditing((v) => {
@@ -27,10 +38,24 @@ export const DailyGridItem = (props: DailyGridItemProps) => {
       return;
     }
 
-    setIsEditing(false);
+    if (props.isToday && props.summary === undefined) {
+      try {
+        await addDaily({
+          variables: {
+            summary: currentText,
+          },
+        });
+      } catch (e) {
+        console.log(e);
+      }
 
+      setIsEditing(false);
+      return;
+    }
+
+    console.log("editDaily");
     try {
-      await editDaily({
+      editDaily({
         variables: {
           id: props.id,
           summary: currentText,
@@ -40,6 +65,8 @@ export const DailyGridItem = (props: DailyGridItemProps) => {
     } catch (e) {
       console.log(e);
     }
+
+    setIsEditing(false);
   };
 
   return (
@@ -60,7 +87,7 @@ export const DailyGridItem = (props: DailyGridItemProps) => {
           alignItems: "center",
         }}
       >
-        <h3>{convertDate(props.dateCreated)}</h3>
+        <h3>{convertDate(props.dateCreated ?? getDateToday())}</h3>
         {isEditing ? (
           <button style={{ padding: "10px" }} onClick={() => handleSubmit()}>
             Submit

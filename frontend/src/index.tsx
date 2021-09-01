@@ -9,25 +9,41 @@ import ReactDOM from "react-dom";
 import { ApolloProvider, useQuery } from "@apollo/client";
 import graphQLClient from "./GraphQLClient";
 import { Home } from "./Pages/Home";
-import "./index.css";
+
 import { Header } from "./stories/Header/Header";
 import { SELF } from "./api/queries";
 import { Self } from "./api/__generated__/Self";
-import { DailyGrid } from "./Pages/Daily/DailyGrid";
+import { DailyGrid } from "./Pages/DailyGrid";
 // import * as serviceWorker from "./../archive/serviceWorker";
+import "./styles/sanitise.css";
+import "./styles/globals.css";
+import { motion } from "framer-motion";
 
 const Index = () => {
   const { loading, error, data } = useQuery<Self>(SELF);
   return (
     <div>
-      <Header user={data?.self} />
-      <Switch>
-        <Route exact path="/">
-          <Redirect to="/home" />
-        </Route>
-        <Route path="/home" render={() => <Home />} />
-        <Route path="/thoughts" render={() => <DailyGrid />} />
-      </Switch>
+      <motion.div
+        initial="pageInitial"
+        animate="pageAnimate"
+        variants={{
+          pageInitial: {
+            opacity: 0,
+          },
+          pageAnimate: {
+            opacity: 1,
+          },
+        }}
+      >
+        <Header user={data?.self} />
+        <Switch>
+          <Route exact path="/">
+            <Redirect to="/home" />
+          </Route>
+          <Route path="/home" render={() => <Home />} />
+          <Route path="/thoughts" render={() => <DailyGrid />} />
+        </Switch>
+      </motion.div>
     </div>
   );
 };

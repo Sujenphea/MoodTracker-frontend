@@ -1,0 +1,74 @@
+html,
+body {
+  background-color: black;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: hsla(0, 0%, 100%, 0.88);
+}
+
+h3 {
+  color: rgb(255, 167, 196);
+  font-family: Montserrat, sans-serif;
+  font-weight: 900;
+  text-rendering: optimizeLegibility;
+  line-height: 1;
+}
+
+small {
+  font-size: 80%;
+}
+
+a {
+  text-decoration: none;
+  color: rgb(255, 167, 196);
+  transition: font-size 0.2s;
+}
+
+img {
+  width: 90%;
+  transition: width 0.2s;
+}
+
+p {
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  padding-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 0;
+  margin-bottom: 1.75rem;
+  color: hsla(0, 0%, 100%, 0.88);
+}
+
+/* Animation */
+.nameAnimation {
+  background: linear-gradient(130deg, rgba(255, 255, 255, 0.5) 0%, #fff 50%);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  width: 0%;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 1s steps(40, end);
+  animation-fill-mode: forwards;
+}
+
+.descAnimation {
+  background: linear-gradient(130deg, rgba(255, 255, 255, 0.5) 0%, #fff 50%);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  width: 0%;
+  overflow: hidden;
+  white-space: nowrap;
+  animation: typing 1s steps(40, end) 1s;
+  animation-fill-mode: forwards;
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}

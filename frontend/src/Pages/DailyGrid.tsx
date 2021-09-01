@@ -1,18 +1,16 @@
 import { useQuery } from "@apollo/client";
+import { Grid } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { DAILIES } from "../../api/queries";
-import {
-  Dailies,
-  Dailies_dailies_nodes,
-} from "../../api/__generated__/Dailies";
-import { IsToday } from "../../helpers/Date";
-import { DailyGridItem } from "./DailyGridItem";
-import { TodayGridItem } from "./TodayGridItem";
+import { DAILIES } from "../api/queries";
+import { Dailies, Dailies_dailies_nodes } from "../api/__generated__/Dailies";
+import { IsToday } from "../helpers/Date";
+import { GridItem } from "../stories/GridItem/GridItem";
 
 export const DailyGrid = () => {
   const { loading, error, data } = useQuery<Dailies>(DAILIES);
   const [writtenToday, setWrittenToday] = useState(false);
+  // const [dailies, setDailies] = useState()
 
   useEffect(() => {
     if (loading || error || !data || !data!.dailies || !data!.dailies!.nodes) {
@@ -33,7 +31,7 @@ export const DailyGrid = () => {
 
     data.dailies.nodes.map((daily: Dailies_dailies_nodes) => {
       res = res.concat(
-        <DailyGridItem
+        <GridItem
           key={Number.parseInt(daily.id)}
           id={Number.parseInt(daily.id)}
           summary={daily.summary}
@@ -57,7 +55,13 @@ export const DailyGrid = () => {
         gridTemplateColumns: "50%" /* width */,
       }}
     >
-      {writtenToday ? <div></div> : <TodayGridItem />}
+      {writtenToday ? (
+        <div></div>
+      ) : (
+        <div style={{ marginTop: "20px" }}>
+          <GridItem isToday={true} isEditing={true} />
+        </div>
+      )}
 
       {getGrid()}
     </div>

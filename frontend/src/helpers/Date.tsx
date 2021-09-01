@@ -31,3 +31,16 @@ export const IsToday = (date: string): boolean => {
 
   return false;
 };
+
+export const getDateToday = () => {
+  const today = new Date(Date.now());
+
+  // modify date to include padding
+  let date = today.getDate().toString();
+  if (date.length === 1) {
+    date = "0" + date;
+  }
+
+  // month is 0-indexed
+  return date + "." + (today.getMonth() + 1) + "." + today.getFullYear();
+};
