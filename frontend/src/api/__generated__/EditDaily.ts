@@ -11,7 +11,7 @@ export interface EditDaily_editDaily {
   __typename: "Daily";
   id: string;
   summary: string;
-  created: any;
+  dateCreated: string;
 }
 
 export interface EditDaily {

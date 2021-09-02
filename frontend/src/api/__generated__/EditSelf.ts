@@ -4,20 +4,20 @@
 // This file was automatically generated and should not be edited.
 
 // ====================================================
-// GraphQL query operation: Daily
+// GraphQL mutation operation: EditSelf
 // ====================================================
 
-export interface Daily_daily {
-  __typename: "Daily";
+export interface EditSelf_editSelf {
+  __typename: "User";
   id: string;
-  summary: string;
-  dateCreated: string;
+  name: string;
+  gitHub: string;
 }
 
-export interface Daily {
-  daily: Daily_daily;
+export interface EditSelf {
+  editSelf: EditSelf_editSelf;
 }
 
-export interface DailyVariables {
-  id: number;
+export interface EditSelfVariables {
+  name?: string | null;
 }

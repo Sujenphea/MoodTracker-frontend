@@ -11,5 +11,5 @@ export interface dailyFields {
   __typename: "Daily";
   id: string;
   summary: string;
-  created: any;
+  dateCreated: string;
 }
