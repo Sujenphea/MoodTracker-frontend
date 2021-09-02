@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
   AppBar,
@@ -15,7 +15,7 @@ import { useMutation } from "@apollo/client";
 import { Self_self } from "../../api/__generated__/Self";
 import { LOGIN } from "../../api/mutations";
 import { Login } from "../../api/__generated__/Login";
-import { PinDropSharp } from "@material-ui/icons";
+import { useAppSelector } from "../../redux/hooks";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
@@ -23,7 +23,6 @@ function useQuery() {
 
 export interface HeaderProps {
   user: Self_self | undefined;
-  isDarkMode: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -54,30 +53,27 @@ const useStyles = makeStyles((theme: Theme) =>
 const CLIENT_ID = "9c00f9b1edf177359d2d";
 
 export const Header = (props: HeaderProps) => {
+  const isDarkMode = useAppSelector((state) => state.darkMode.value);
+  const classes = useStyles();
+  const query = useQuery();
+  const [login] = useMutation<Login>(LOGIN);
+
   const titleStyle = css({
     display: "flex",
     flexGrow: 1,
     marginRight: "200px",
-    color: props.isDarkMode
-      ? "rgba(255, 255, 255, 0.88)"
-      : "rgba(70, 70, 70, 0.87)",
+    color: isDarkMode ? "rgba(255, 255, 255, 0.88)" : "rgba(70, 70, 70, 0.87)",
   });
 
   const buttonStyle = css({
-    color: props.isDarkMode
-      ? "rgba(255, 255, 255, 0.88)"
-      : "rgba(70, 70, 70, 0.87)",
+    color: isDarkMode ? "rgba(255, 255, 255, 0.88)" : "rgba(70, 70, 70, 0.87)",
   });
 
   const appBarStyle = css({
     backgroundColor: "transparent",
-    boxShadow: props.isDarkMode ? "0 4px 2px -2px #444" : "0 4px 2px -2px #ddd",
+    boxShadow: isDarkMode ? "0 4px 2px -2px #444" : "0 4px 2px -2px #ddd",
     height: "65px",
   });
-
-  const classes = useStyles();
-  const query = useQuery();
-  const [login] = useMutation<Login>(LOGIN);
 
   useEffect(() => {
     const loginMethod = async () => {

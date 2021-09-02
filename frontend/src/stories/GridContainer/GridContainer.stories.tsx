@@ -1,6 +1,8 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
 import { GridContainer, GridContainerProps } from "./GridContainer";
+import { Provider } from "react-redux";
+import { store } from "../../redux/store";
 
 export default {
   title: "UI Components/GridContainer",
@@ -15,13 +17,14 @@ export default {
 } as Meta;
 
 const Template: Story<GridContainerProps> = (args) => (
-  <GridContainer {...args} />
+  <Provider store={store}>
+    <GridContainer {...args} />
+  </Provider>
 );
 
 export const DailyGridContainer = Template.bind({});
 
 DailyGridContainer.args = {
-  isDarkMode: true,
   data: {
     dailies: {
       __typename: "DailyConnection",

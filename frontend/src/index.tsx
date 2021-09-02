@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useState } from "react";
+import React from "react";
 import {
   BrowserRouter as Router,
   Redirect,
@@ -23,9 +23,14 @@ import { Dailies } from "./api/__generated__/Dailies";
 import { GridContainer } from "./stories/GridContainer/GridContainer";
 import darkModeIconBlack from "./images/darkModeIconBlack.png";
 import darkModeIconWhite from "./images/darkModeIconWhite.png";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import { toggle } from "./redux/reducers/darkModeSlice";
 
 const Index = () => {
-  const [isDarkMode, setIsDarkMode] = useState(true);
+  const isDarkMode = useAppSelector((state) => state.darkMode.value);
+  const dispatch = useAppDispatch();
 
   const {
     loading: sloading,
@@ -74,11 +79,11 @@ const Index = () => {
           },
         }}
       >
-        <Header user={sdata?.self} isDarkMode={isDarkMode} />
+        <Header user={sdata?.self} />
         <div
           css={darkModeToggleStyle}
           onClick={() => {
-            setIsDarkMode((m) => !m);
+            dispatch(toggle());
           }}
         >
           <img
@@ -90,15 +95,11 @@ const Index = () => {
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
-          <Route path="/home" render={() => <Home isDarkMode={isDarkMode} />} />
+          <Route path="/home" render={() => <Home />} />
           <Route
             path="/thoughts"
             render={() => (
-              <GridContainer
-                isDarkMode={isDarkMode}
-                data={ddata}
-                refetchData={() => refetch()}
-              />
+              <GridContainer data={ddata} refetchData={() => refetch()} />
             )}
           />
         </Switch>
@@ -108,13 +109,15 @@ const Index = () => {
 };
 
 ReactDOM.render(
-  <Router>
-    <ApolloProvider client={graphQLClient}>
-      <React.StrictMode>
-        <Index />
-      </React.StrictMode>
-    </ApolloProvider>
-  </Router>,
+  <Provider store={store}>
+    <Router>
+      <ApolloProvider client={graphQLClient}>
+        <React.StrictMode>
+          <Index />
+        </React.StrictMode>
+      </ApolloProvider>
+    </Router>
+  </Provider>,
   document.getElementById("root")
 );
 

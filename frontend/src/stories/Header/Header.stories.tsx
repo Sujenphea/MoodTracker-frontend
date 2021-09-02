@@ -2,15 +2,19 @@ import React from "react";
 import { Story, Meta } from "@storybook/react";
 import { Header, HeaderProps } from "./Header";
 import { MemoryRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+import { store } from "../../redux/store";
 
 export default {
   title: "UI Components/Header",
   component: Header,
   decorators: [
     (Story) => (
-      <MemoryRouter>
-        <Story />
-      </MemoryRouter>
+      <Provider store={store}>
+        <MemoryRouter>
+          <Story />
+        </MemoryRouter>
+      </Provider>
     ),
   ],
 } as Meta;
@@ -19,7 +23,6 @@ const Template: Story<HeaderProps> = (args) => <Header {...args} />;
 
 export const LoggedIn = Template.bind({});
 LoggedIn.args = {
-  isDarkMode: true,
   user: {
     __typename: "User",
     id: "1",

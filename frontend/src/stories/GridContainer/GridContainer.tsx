@@ -25,7 +25,6 @@ const useStyles = makeStyles(() =>
 );
 
 export interface GridContainerProps {
-  isDarkMode: boolean;
   data: Dailies | undefined;
   refetchData: () => void;
 }
@@ -49,7 +48,6 @@ export const GridContainer = (props: GridContainerProps) => {
     props.data.dailies.nodes.forEach((daily: Dailies_dailies_nodes) => {
       res = res.concat(
         <GridItem
-          isDarkMode={props.isDarkMode}
           key={Number.parseInt(daily.id)}
           id={Number.parseInt(daily.id)}
           summary={daily.summary}
@@ -68,7 +66,6 @@ export const GridContainer = (props: GridContainerProps) => {
       ) : (
         <div className={classes.todayGrid}>
           <GridItem
-            isDarkMode={props.isDarkMode}
             isToday={true}
             isEditing={true}
             didSubmit={() => props.refetchData()}

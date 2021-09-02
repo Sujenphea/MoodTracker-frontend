@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { useMutation } from "@apollo/client";
 import { ADD_DAILY, EDIT_DAILY } from "../../api/mutations";
@@ -8,9 +8,9 @@ import { EditDaily } from "../../api/__generated__/EditDaily";
 import { convertDate, getDateToday } from "../../helpers/Date";
 import { useEffect } from "react";
 import { AddDaily } from "../../api/__generated__/AddDaily";
+import { useAppSelector } from "../../redux/hooks";
 
 export interface GridItemProps {
-  isDarkMode: boolean;
   id?: number;
   summary?: string;
   dateCreated?: string;
@@ -72,10 +72,18 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 export const GridItem = (props: GridItemProps) => {
+  const isDarkMode = useAppSelector((state) => state.darkMode.value);
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [currentText, setCurrentText] = useState(props.summary);
+  const [editDaily] = useMutation<EditDaily>(EDIT_DAILY);
+  const [addDaily] = useMutation<AddDaily>(ADD_DAILY);
+
+  const textfieldRef = useRef<HTMLSpanElement>(null);
+  const classes = useStyles();
+
   const rootStyle = css({
-    background: props.isDarkMode
-      ? "rgba(50,50,50,0.8)"
-      : "rgba(250,250,250,0.8)",
+    background: isDarkMode ? "rgba(50,50,50,0.8)" : "rgba(250,250,250,0.8)",
     borderRadius: "10px",
     // border: "1px solid black",
     minWidth: "100%",
@@ -86,18 +94,10 @@ export const GridItem = (props: GridItemProps) => {
   });
 
   const summaryStyle = css({
-    color: props.isDarkMode
+    color: isDarkMode
       ? "rgba(200, 200, 200, 0.88)"
       : "rgba(100, 100, 100, 0.7)",
   });
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [currentText, setCurrentText] = useState(props.summary);
-  const [editDaily] = useMutation<EditDaily>(EDIT_DAILY);
-  const [addDaily] = useMutation<AddDaily>(ADD_DAILY);
-
-  const textfieldRef = useRef<HTMLSpanElement>(null);
-  const classes = useStyles();
 
   useEffect(() => {
     if (props.isEditing) {

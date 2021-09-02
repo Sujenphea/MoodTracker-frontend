@@ -1,10 +1,10 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
 import { GridItem, GridItemProps } from "./GridItem";
-import { ApolloProvider, useMutation } from "@apollo/client";
+import { ApolloProvider } from "@apollo/client";
 import graphQLClient from "../../GraphQLClient";
-import { EDIT_DAILY } from "../../api/mutations";
-import { EditDaily } from "../../api/__generated__/EditDaily";
+import { store } from "../../redux/store";
+import { Provider } from "react-redux";
 
 export default {
   title: "UI Components/GridItem",
@@ -12,9 +12,11 @@ export default {
 } as Meta;
 
 const Template: Story<GridItemProps> = (args) => (
-  <ApolloProvider client={graphQLClient}>
-    <GridItem {...args} />
-  </ApolloProvider>
+  <Provider store={store}>
+    <ApolloProvider client={graphQLClient}>
+      <GridItem {...args} />
+    </ApolloProvider>
+  </Provider>
 );
 
 export const DailyGridItem = Template.bind({});
