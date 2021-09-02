@@ -1,7 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
 import { GridContainer, GridContainerProps } from "./GridContainer";
-import { MemoryRouter } from "react-router-dom";
 
 export default {
   title: "UI Components/GridContainer",
@@ -22,6 +21,7 @@ const Template: Story<GridContainerProps> = (args) => (
 export const DailyGridContainer = Template.bind({});
 
 DailyGridContainer.args = {
+  isDarkMode: true,
   data: {
     dailies: {
       __typename: "DailyConnection",

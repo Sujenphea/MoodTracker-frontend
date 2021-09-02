@@ -19,6 +19,7 @@ const Template: Story<HeaderProps> = (args) => <Header {...args} />;
 
 export const LoggedIn = Template.bind({});
 LoggedIn.args = {
+  isDarkMode: true,
   user: {
     __typename: "User",
     id: "1",

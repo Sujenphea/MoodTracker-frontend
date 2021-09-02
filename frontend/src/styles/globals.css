@@ -1,13 +1,11 @@
 html,
 body {
-  background-color: black;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  color: hsla(0, 0%, 100%, 0.88);
 }
 
 h3 {
-  color: rgb(255, 167, 196);
+  color: #bb86fc;
   font-family: Montserrat, sans-serif;
   font-weight: 900;
   text-rendering: optimizeLegibility;
@@ -20,13 +18,8 @@ small {
 
 a {
   text-decoration: none;
-  color: rgb(255, 167, 196);
+  color: #bb86fc;
   transition: font-size 0.2s;
-}
-
-img {
-  width: 90%;
-  transition: width 0.2s;
 }
 
 p {

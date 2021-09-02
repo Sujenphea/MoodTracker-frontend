@@ -1,9 +1,6 @@
-import { useQuery } from "@apollo/client";
 import { createStyles, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { classicNameResolver } from "typescript";
-import { DAILIES } from "../../api/queries";
 import {
   Dailies,
   Dailies_dailies_nodes,
@@ -19,7 +16,6 @@ const useStyles = makeStyles(() =>
       alignItems: "center",
       justifyContent: "center",
       rowGap: "20px",
-      border: "1px solid blue",
       gridTemplateColumns: "50%" /* width */,
     },
     todayGrid: {
@@ -29,6 +25,7 @@ const useStyles = makeStyles(() =>
 );
 
 export interface GridContainerProps {
+  isDarkMode: boolean;
   data: Dailies | undefined;
   refetchData: () => void;
 }
@@ -49,9 +46,10 @@ export const GridContainer = (props: GridContainerProps) => {
 
     let res: JSX.Element[] = [];
 
-    props.data.dailies.nodes.map((daily: Dailies_dailies_nodes) => {
+    props.data.dailies.nodes.forEach((daily: Dailies_dailies_nodes) => {
       res = res.concat(
         <GridItem
+          isDarkMode={props.isDarkMode}
           key={Number.parseInt(daily.id)}
           id={Number.parseInt(daily.id)}
           summary={daily.summary}
@@ -70,6 +68,7 @@ export const GridContainer = (props: GridContainerProps) => {
       ) : (
         <div className={classes.todayGrid}>
           <GridItem
+            isDarkMode={props.isDarkMode}
             isToday={true}
             isEditing={true}
             didSubmit={() => props.refetchData()}

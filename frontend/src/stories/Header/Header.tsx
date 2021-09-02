@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { jsx, css } from "@emotion/react";
 import React, { useEffect } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
@@ -13,29 +15,21 @@ import { useMutation } from "@apollo/client";
 import { Self_self } from "../../api/__generated__/Self";
 import { LOGIN } from "../../api/mutations";
 import { Login } from "../../api/__generated__/Login";
+import { PinDropSharp } from "@material-ui/icons";
 
 function useQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
 export interface HeaderProps {
-  user?: Self_self;
+  user: Self_self | undefined;
+  isDarkMode: boolean;
 }
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-    },
-    appBar: {
-      backgroundColor: "#676767",
-      height: "65px",
-    },
-    title: {
-      display: "flex",
-      flexGrow: 1,
-      marginRight: "200px",
-      color: "white",
     },
     inputRoot: {
       color: "inherit",
@@ -59,7 +53,28 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const CLIENT_ID = "9c00f9b1edf177359d2d";
 
-export const Header: React.FC<HeaderProps> = ({ user }) => {
+export const Header = (props: HeaderProps) => {
+  const titleStyle = css({
+    display: "flex",
+    flexGrow: 1,
+    marginRight: "200px",
+    color: props.isDarkMode
+      ? "rgba(255, 255, 255, 0.88)"
+      : "rgba(70, 70, 70, 0.87)",
+  });
+
+  const buttonStyle = css({
+    color: props.isDarkMode
+      ? "rgba(255, 255, 255, 0.88)"
+      : "rgba(70, 70, 70, 0.87)",
+  });
+
+  const appBarStyle = css({
+    backgroundColor: "transparent",
+    boxShadow: props.isDarkMode ? "0 4px 2px -2px #444" : "0 4px 2px -2px #ddd",
+    height: "65px",
+  });
+
   const classes = useStyles();
   const query = useQuery();
   const [login] = useMutation<Login>(LOGIN);
@@ -85,17 +100,17 @@ export const Header: React.FC<HeaderProps> = ({ user }) => {
 
   return (
     <div className={classes.root}>
-      <AppBar className={classes.appBar} position="static">
+      <AppBar css={appBarStyle} position="static">
         <Toolbar className={classes.toolBar}>
           <IconButton href="/home">
-            <Typography className={classes.title} variant="h5" noWrap>
+            <Typography css={titleStyle} variant="h5" noWrap>
               Moodiful
             </Typography>
           </IconButton>
 
-          {user == null ? (
+          {props.user == null ? (
             <Button
-              color="inherit"
+              css={buttonStyle}
               href={`https://github.com/login/oauth/authorize?client_id=${CLIENT_ID}&scope=user`}
             >
               Login

@@ -1,4 +1,5 @@
-import React from "react";
+/** @jsx jsx */
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Redirect,
@@ -9,6 +10,7 @@ import ReactDOM from "react-dom";
 import { ApolloProvider, useQuery } from "@apollo/client";
 import graphQLClient from "./GraphQLClient";
 
+import { css, jsx, Global } from "@emotion/react";
 import { Header } from "./stories/Header/Header";
 import { DAILIES, SELF } from "./api/queries";
 import { Self } from "./api/__generated__/Self";
@@ -19,8 +21,12 @@ import { motion } from "framer-motion";
 import { Home } from "./stories/Home/Home";
 import { Dailies } from "./api/__generated__/Dailies";
 import { GridContainer } from "./stories/GridContainer/GridContainer";
+import darkModeIconBlack from "./images/darkModeIconBlack.png";
+import darkModeIconWhite from "./images/darkModeIconWhite.png";
 
 const Index = () => {
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
   const {
     loading: sloading,
     error: serror,
@@ -34,8 +40,28 @@ const Index = () => {
     refetch,
   } = useQuery<Dailies>(DAILIES);
 
+  const darkModeToggleStyle = css({
+    position: "absolute",
+    right: "30px",
+    top: "90px",
+  });
+
   return (
     <div>
+      <Global
+        styles={{
+          body: {
+            backgroundColor: isDarkMode ? "#121212" : "#f0f0f0",
+            transition: "background 0.5s",
+            // primary: "#BB86FC",
+            // secondary: "#03DAC6",
+            // error: "#CF6679",
+            color: isDarkMode
+              ? "rgba(255, 255, 255, 0.88)"
+              : "rgba(70, 70, 70, 0.87)",
+          },
+        }}
+      />
       <motion.div
         initial="pageInitial"
         animate="pageAnimate"
@@ -48,21 +74,34 @@ const Index = () => {
           },
         }}
       >
-        {/* <Provider store={store}> */}
-        <Header user={sdata?.self} />
+        <Header user={sdata?.self} isDarkMode={isDarkMode} />
+        <div
+          css={darkModeToggleStyle}
+          onClick={() => {
+            setIsDarkMode((m) => !m);
+          }}
+        >
+          <img
+            src={isDarkMode ? darkModeIconWhite : darkModeIconBlack}
+            alt="dark mode toggle"
+          ></img>
+        </div>
         <Switch>
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
-          <Route path="/home" render={() => <Home />} />
+          <Route path="/home" render={() => <Home isDarkMode={isDarkMode} />} />
           <Route
             path="/thoughts"
             render={() => (
-              <GridContainer data={ddata} refetchData={() => refetch()} />
+              <GridContainer
+                isDarkMode={isDarkMode}
+                data={ddata}
+                refetchData={() => refetch()}
+              />
             )}
           />
         </Switch>
-        {/* </Provider> */}
       </motion.div>
     </div>
   );

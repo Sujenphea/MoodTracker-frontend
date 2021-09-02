@@ -1,6 +1,6 @@
 import React from "react";
 import { Story, Meta } from "@storybook/react";
-import { Home } from "./Home";
+import { Home, HomeProps } from "./Home";
 import { MemoryRouter } from "react-router-dom";
 
 export default {
@@ -15,6 +15,9 @@ export default {
   ],
 } as Meta;
 
-const Template: Story = () => <Home />;
+const Template: Story<HomeProps> = (args) => <Home {...args} />;
 
 export const HomeSample = Template.bind({});
+HomeSample.args = {
+  isDarkMode: true,
+};
