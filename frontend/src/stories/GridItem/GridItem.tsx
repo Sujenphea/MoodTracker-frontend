@@ -1,5 +1,5 @@
-import React, { Props, useState } from "react";
-import { IconButton } from "@material-ui/core";
+import React, { useState } from "react";
+import { Box, createStyles, makeStyles, Theme } from "@material-ui/core";
 import { useMutation } from "@apollo/client";
 import { ADD_DAILY, EDIT_DAILY } from "../../api/mutations";
 import { EditDaily } from "../../api/__generated__/EditDaily";
@@ -16,11 +16,66 @@ export interface GridItemProps {
   didSubmit?: () => void;
 }
 
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {
+      border: "1px solid black",
+      minWidth: "100%",
+      maxWidth: "100%",
+      minHeight: "200px",
+      padding: "0px 20px",
+      marginTop: "20px",
+    },
+    topBar: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+    },
+    textArea: {
+      display: "grid",
+      [theme.breakpoints.down("md")]: {
+        gridTemplateColumns: "1fr",
+      },
+      [theme.breakpoints.up("md")]: {
+        gridTemplateColumns: "0.3fr 1fr",
+      },
+
+      columnGap: "20px",
+      justifyContent: "space-evenly",
+    },
+    shortDate: {
+      [theme.breakpoints.up("sm")]: {
+        display: "none",
+      },
+      [theme.breakpoints.down("sm")]: {
+        display: "block",
+      },
+    },
+    longDate: {
+      [theme.breakpoints.up("sm")]: {
+        display: "block",
+      },
+      [theme.breakpoints.down("sm")]: {
+        display: "none",
+      },
+    },
+    button: {
+      padding: "10px",
+      border: "none",
+      backgroundColor: "transparent",
+      shadow: "none",
+      color: "inherit",
+      font: "inherit",
+    },
+  })
+);
+
 export const GridItem = (props: GridItemProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [currentText, setCurrentText] = useState(props.summary);
   const [editDaily] = useMutation<EditDaily>(EDIT_DAILY);
   const [addDaily] = useMutation<AddDaily>(ADD_DAILY);
+  const classes = useStyles();
 
   useEffect(() => {
     if (props.isEditing) {
@@ -75,44 +130,27 @@ export const GridItem = (props: GridItemProps) => {
   };
 
   return (
-    <div
-      style={{
-        border: "1px solid black",
-        minWidth: "100%",
-        maxWidth: "100%",
-        minHeight: "200px",
-        padding: "0px 20px",
-        marginTop: "20px",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-        }}
-      >
-        <h3>{convertDate(props.dateCreated ?? getDateToday())}</h3>
+    <div className={classes.root}>
+      <div className={classes.topBar}>
+        <h3 className={classes.longDate}>
+          {convertDate(props.dateCreated ?? getDateToday())}
+        </h3>
+        <h3 className={classes.shortDate}>
+          {props.dateCreated ?? getDateToday()}
+        </h3>
         {isEditing ? (
-          <button style={{ padding: "10px" }} onClick={() => handleSubmit()}>
+          <button className={classes.button} onClick={() => handleSubmit()}>
             Submit
           </button>
         ) : (
-          <button style={{ padding: "10px" }} onClick={() => handleEdit()}>
+          <button className={classes.button} onClick={() => handleEdit()}>
             Edit
           </button>
         )}
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "0.3fr 1fr",
-          columnGap: "20px",
-          justifyContent: "space-evenly",
-        }}
-      >
-        <div>summary</div>
+      <div className={classes.textArea}>
+        <Box display={{ xs: "none", sm: "none", md: "block" }}>summary</Box>
         {isEditing ? (
           <form>
             <span

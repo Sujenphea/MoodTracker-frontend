@@ -12,13 +12,13 @@ import graphQLClient from "./GraphQLClient";
 import { Header } from "./stories/Header/Header";
 import { DAILIES, SELF } from "./api/queries";
 import { Self } from "./api/__generated__/Self";
-import { DailyGrid } from "./pages/DailyGrid";
 // import * as serviceWorker from "./../archive/serviceWorker";
 import "./styles/sanitise.css";
 import "./styles/globals.css";
 import { motion } from "framer-motion";
 import { Home } from "./stories/Home/Home";
 import { Dailies } from "./api/__generated__/Dailies";
+import { GridContainer } from "./stories/GridContainer/GridContainer";
 
 const Index = () => {
   const {
@@ -58,7 +58,7 @@ const Index = () => {
           <Route
             path="/thoughts"
             render={() => (
-              <DailyGrid data={ddata} refetchData={() => refetch()} />
+              <GridContainer data={ddata} refetchData={() => refetch()} />
             )}
           />
         </Switch>

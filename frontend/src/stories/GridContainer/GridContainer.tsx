@@ -1,20 +1,42 @@
 import { useQuery } from "@apollo/client";
+import { createStyles, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { DAILIES } from "../api/queries";
-import { Dailies, Dailies_dailies_nodes } from "../api/__generated__/Dailies";
-import { IsToday } from "../helpers/Date";
-import { GridItem } from "../stories/GridItem/GridItem";
+import { classicNameResolver } from "typescript";
+import { DAILIES } from "../../api/queries";
+import {
+  Dailies,
+  Dailies_dailies_nodes,
+} from "../../api/__generated__/Dailies";
+import { IsToday } from "../../helpers/Date";
+import { GridItem } from "../GridItem/GridItem";
 
-interface DailyGridProps {
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      display: "grid",
+      gridColumn: "1",
+      alignItems: "center",
+      justifyContent: "center",
+      rowGap: "20px",
+      border: "1px solid blue",
+      gridTemplateColumns: "50%" /* width */,
+    },
+    todayGrid: {
+      marginTop: "20px",
+    },
+  })
+);
+
+export interface GridContainerProps {
   data: Dailies | undefined;
   refetchData: () => void;
 }
 
-export const DailyGrid = (props: DailyGridProps) => {
-  // const { loading, error, data, refetch } = useQuery<Dailies>(DAILIES);
+export const GridContainer = (props: GridContainerProps) => {
   const [writtenToday, setWrittenToday] = useState(false);
   const [dailies, setDailies] = useState<JSX.Element[]>([]);
+  const classes = useStyles();
 
   useEffect(() => {
     if (!props.data || !props.data.dailies || !props.data.dailies.nodes) {
@@ -42,21 +64,11 @@ export const DailyGrid = (props: DailyGridProps) => {
   }, [props.data]);
 
   return (
-    <div
-      style={{
-        display: "grid",
-        gridColumn: "1",
-        alignItems: "center",
-        justifyContent: "center",
-        rowGap: "20px",
-        border: "1px solid blue",
-        gridTemplateColumns: "50%" /* width */,
-      }}
-    >
+    <div className={classes.root}>
       {writtenToday ? (
         <div></div>
       ) : (
-        <div style={{ marginTop: "20px" }}>
+        <div className={classes.todayGrid}>
           <GridItem
             isToday={true}
             isEditing={true}
