@@ -37,6 +37,9 @@ namespace MoodTracker
                     .AllowAnyMethod()
                     .AllowAnyHeader();
             }));
+
+            services.AddControllers();
+
             services.AddPooledDbContextFactory<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddAuthorization();
             services
@@ -87,6 +90,7 @@ namespace MoodTracker
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGraphQL();
+                endpoints.MapControllers();
             });
         }
     }

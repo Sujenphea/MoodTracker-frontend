@@ -44,7 +44,7 @@ const Template: Story<homeArgs> = (homeArgs) => {
           },
         }}
       />
-      <Home />
+      <Home quote={"hello"} author={"helo"} />
     </div>
   );
 };

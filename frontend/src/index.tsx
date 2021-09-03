@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Redirect,
@@ -21,16 +21,31 @@ import { motion } from "framer-motion";
 import { Home } from "./stories/Home/Home";
 import { Dailies } from "./api/__generated__/Dailies";
 import { GridContainer } from "./stories/GridContainer/GridContainer";
-import darkModeIconBlack from "./images/darkModeIconBlack.png";
-import darkModeIconWhite from "./images/darkModeIconWhite.png";
+import darkModeIconBlack from "./assets/darkModeIconBlack.png";
+import darkModeIconWhite from "./assets/darkModeIconWhite.png";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { toggle } from "./redux/reducers/darkModeSlice";
+import { QuoteType } from "./helpers/Quote";
 
 const Index = () => {
   const isDarkMode = useAppSelector((state) => state.darkMode.value);
   const dispatch = useAppDispatch();
+  const [quote, setQuote] = useState<QuoteType | undefined>(undefined);
+
+  useEffect(() => {
+    fetch("https://localhost:5001/api/GetLogo")
+      .then((data) => {
+        return data.json();
+      })
+      .then((res) => {
+        setQuote(res);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, []);
 
   const {
     loading: sloading,
@@ -95,7 +110,15 @@ const Index = () => {
           <Route exact path="/">
             <Redirect to="/home" />
           </Route>
-          <Route path="/home" render={() => <Home />} />
+          <Route
+            path="/home"
+            render={() => (
+              <Home
+                quote={quote?.quoteText ?? ""}
+                author={quote?.quoteAuthor ?? ""}
+              />
+            )}
+          />
           <Route
             path="/thoughts"
             render={() => (
