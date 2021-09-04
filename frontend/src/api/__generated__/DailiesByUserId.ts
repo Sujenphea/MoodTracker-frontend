@@ -16,9 +16,9 @@ export interface DailiesByUserId_dailiesByUserId_nodes_user {
 
 export interface DailiesByUserId_dailiesByUserId_nodes {
   __typename: "Daily";
+  id: string;
   summary: string;
   dateCreated: string;
-  id: string;
   user: DailiesByUserId_dailiesByUserId_nodes_user;
 }
 

@@ -25,35 +25,5 @@ const Template: Story<GridContainerProps> = (args) => (
 export const DailyGridContainer = Template.bind({});
 
 DailyGridContainer.args = {
-  data: {
-    dailies: {
-      __typename: "DailyConnection",
-      nodes: [
-        {
-          __typename: "Daily",
-          summary: "hey world",
-          dateCreated: "02.09.2021",
-          id: "3",
-          user: {
-            __typename: "User",
-            id: "1",
-            name: "john",
-            gitHub: "johnhu",
-          },
-        },
-        {
-          __typename: "Daily",
-          summary: "hey",
-          dateCreated: "31.08.2021",
-          id: "2",
-          user: {
-            __typename: "User",
-            id: "1",
-            name: "john",
-            gitHub: "johnhu",
-          },
-        },
-      ],
-    },
-  },
+  userId: 1,
 };

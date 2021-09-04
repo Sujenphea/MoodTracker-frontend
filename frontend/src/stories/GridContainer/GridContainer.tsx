@@ -1,10 +1,10 @@
+import { useQuery } from "@apollo/client";
 import { createStyles, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import {
-  Dailies,
-  Dailies_dailies_nodes,
-} from "../../api/__generated__/Dailies";
+import { DAILIESBYUSERID } from "../../api/queries";
+import { Dailies_dailies_nodes } from "../../api/__generated__/Dailies";
+import { DailiesByUserId } from "../../api/__generated__/DailiesByUserId";
 import { IsToday } from "../../helpers/Date";
 import { GridItem } from "../GridItem/GridItem";
 
@@ -25,8 +25,7 @@ const useStyles = makeStyles(() =>
 );
 
 export interface GridContainerProps {
-  data: Dailies | undefined;
-  refetchData: () => void;
+  userId: number;
 }
 
 export const GridContainer = (props: GridContainerProps) => {
@@ -34,18 +33,33 @@ export const GridContainer = (props: GridContainerProps) => {
   const [dailies, setDailies] = useState<JSX.Element[]>([]);
   const classes = useStyles();
 
+  // get data
+
+  const {
+    loading: dloading,
+    error: derror,
+    data: ddata,
+    refetch,
+  } = useQuery<DailiesByUserId>(DAILIESBYUSERID, {
+    variables: { id: props.userId },
+  });
+
   useEffect(() => {
-    if (!props.data || !props.data.dailies || !props.data.dailies.nodes) {
+    if (!ddata || !ddata.dailiesByUserId || !ddata.dailiesByUserId.nodes) {
       return;
     }
 
-    if (IsToday(props.data.dailies.nodes[0].dateCreated)) {
+    if (ddata.dailiesByUserId.nodes.length === 0) {
+      return;
+    }
+
+    if (IsToday(ddata.dailiesByUserId.nodes[0].dateCreated)) {
       setWrittenToday(true);
     }
 
     let res: JSX.Element[] = [];
 
-    props.data.dailies.nodes.forEach((daily: Dailies_dailies_nodes) => {
+    ddata.dailiesByUserId.nodes.forEach((daily: Dailies_dailies_nodes) => {
       res = res.concat(
         <GridItem
           key={Number.parseInt(daily.id)}
@@ -57,7 +71,7 @@ export const GridContainer = (props: GridContainerProps) => {
     });
 
     setDailies(res);
-  }, [props.data]);
+  }, [ddata]);
 
   return (
     <div className={classes.root}>
@@ -68,7 +82,9 @@ export const GridContainer = (props: GridContainerProps) => {
           <GridItem
             isToday={true}
             isEditing={true}
-            didSubmit={() => props.refetchData()}
+            didSubmit={() => {
+              refetch();
+            }}
           />
         </div>
       )}

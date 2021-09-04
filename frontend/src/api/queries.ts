@@ -40,6 +40,21 @@ export const DAILIES = gql`
   }
 `;
 
+export const DAILIESBYUSERID = gql`
+  query DailiesByUserId($id: Int!) {
+    dailiesByUserId(id: $id) {
+      nodes {
+        ...dailyFields
+        user {
+          ...userFields
+        }
+      }
+    }
+  }
+  ${fragments.DAILY}
+  ${fragments.USER}
+`;
+
 export const DAILY = gql`
   query Daily($id: Int!) {
     daily(id: $id) {

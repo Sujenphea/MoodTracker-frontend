@@ -1,6 +1,5 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
-import { useEffect } from "react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import {
   AppBar,
@@ -10,16 +9,8 @@ import {
   Typography,
 } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { useLocation } from "react-router-dom";
-import { useMutation } from "@apollo/client";
 import { Self_self } from "../../api/__generated__/Self";
-import { LOGIN } from "../../api/mutations";
-import { Login } from "../../api/__generated__/Login";
 import { useAppSelector } from "../../redux/hooks";
-
-function useQuery() {
-  return new URLSearchParams(useLocation().search);
-}
 
 export interface HeaderProps {
   user: Self_self | undefined;
@@ -55,8 +46,6 @@ const CLIENT_ID = "9c00f9b1edf177359d2d";
 export const Header = (props: HeaderProps) => {
   const isDarkMode = useAppSelector((state) => state.darkMode.value);
   const classes = useStyles();
-  const query = useQuery();
-  const [login] = useMutation<Login>(LOGIN);
 
   const titleStyle = css({
     display: "flex",
@@ -74,25 +63,6 @@ export const Header = (props: HeaderProps) => {
     boxShadow: isDarkMode ? "0 4px 2px -2px #444" : "0 4px 2px -2px #ddd",
     height: "65px",
   });
-
-  useEffect(() => {
-    const loginMethod = async () => {
-      const code = query.get("code");
-      if (code != null) {
-        try {
-          const { data } = await login({ variables: { code } });
-
-          if (data != null) {
-            localStorage.setItem("token", data.login.jwt);
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    };
-    loginMethod();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <div className={classes.root}>

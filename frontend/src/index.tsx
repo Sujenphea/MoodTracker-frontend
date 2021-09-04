@@ -7,19 +7,18 @@ import {
   Switch,
 } from "react-router-dom";
 import ReactDOM from "react-dom";
-import { ApolloProvider, useQuery } from "@apollo/client";
+import { ApolloProvider, useMutation, useQuery } from "@apollo/client";
 import graphQLClient from "./GraphQLClient";
 
 import { css, jsx, Global } from "@emotion/react";
 import { Header } from "./stories/Header/Header";
-import { DAILIES, SELF } from "./api/queries";
+import { SELF } from "./api/queries";
 import { Self } from "./api/__generated__/Self";
 // import * as serviceWorker from "./../archive/serviceWorker";
 import "./styles/sanitise.css";
 import "./styles/globals.css";
 import { motion } from "framer-motion";
 import { Home } from "./stories/Home/Home";
-import { Dailies } from "./api/__generated__/Dailies";
 import { GridContainer } from "./stories/GridContainer/GridContainer";
 import darkModeIconBlack from "./assets/darkModeIconBlack.png";
 import darkModeIconWhite from "./assets/darkModeIconWhite.png";
@@ -28,12 +27,51 @@ import { store } from "./redux/store";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { toggle } from "./redux/reducers/darkModeSlice";
 import { QuoteType } from "./helpers/Quote";
+import { useLocation } from "react-router-dom";
+import { LOGIN } from "./api/mutations";
+import { Login } from "./api/__generated__/Login";
+
+function useQueryCode() {
+  return new URLSearchParams(useLocation().search);
+}
 
 const Index = () => {
   const isDarkMode = useAppSelector((state) => state.darkMode.value);
   const dispatch = useAppDispatch();
   const [quote, setQuote] = useState<QuoteType | undefined>(undefined);
 
+  // login
+  const query = useQueryCode();
+  const [login] = useMutation<Login>(LOGIN);
+
+  // user info
+  const {
+    loading: sloading,
+    error: serror,
+    data: sdata,
+  } = useQuery<Self>(SELF);
+
+  // get login info
+  useEffect(() => {
+    const loginMethod = async () => {
+      const code = query.get("code");
+      if (code != null) {
+        try {
+          const { data } = await login({ variables: { code } });
+
+          if (data != null) {
+            localStorage.setItem("token", data.login.jwt);
+          }
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    };
+    loginMethod();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Get Quote from public API
   useEffect(() => {
     fetch("https://localhost:5001/api/GetLogo")
       .then((data) => {
@@ -46,19 +84,6 @@ const Index = () => {
         console.log("err", err);
       });
   }, []);
-
-  const {
-    loading: sloading,
-    error: serror,
-    data: sdata,
-  } = useQuery<Self>(SELF);
-
-  const {
-    loading: dloading,
-    error: derror,
-    data: ddata,
-    refetch,
-  } = useQuery<Dailies>(DAILIES);
 
   const darkModeToggleStyle = css({
     position: "absolute",
@@ -122,7 +147,9 @@ const Index = () => {
           <Route
             path="/thoughts"
             render={() => (
-              <GridContainer data={ddata} refetchData={() => refetch()} />
+              <GridContainer
+                userId={sdata ? Number.parseInt(sdata.self.id) : 1}
+              />
             )}
           />
         </Switch>
