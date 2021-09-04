@@ -11,6 +11,7 @@ import {
 import Button from "@material-ui/core/Button";
 import { Self_self } from "../../api/__generated__/Self";
 import { useAppSelector } from "../../redux/hooks";
+import { Link } from "react-router-dom";
 
 export interface HeaderProps {
   user: Self_self | undefined;
@@ -62,17 +63,18 @@ export const Header = (props: HeaderProps) => {
     backgroundColor: "transparent",
     boxShadow: isDarkMode ? "0 4px 2px -2px #444" : "0 4px 2px -2px #ddd",
     height: "65px",
+    justifyContent: "center",
   });
 
   return (
     <div className={classes.root}>
       <AppBar css={appBarStyle} position="static">
         <Toolbar className={classes.toolBar}>
-          <IconButton href="/home">
+          <Link to="/home">
             <Typography css={titleStyle} variant="h5" noWrap>
               Moodiful
             </Typography>
-          </IconButton>
+          </Link>
 
           {props.user == null ? (
             <Button
@@ -83,10 +85,10 @@ export const Header = (props: HeaderProps) => {
             </Button>
           ) : (
             <div className={classes.userInformation}>
-              <Button color="inherit" href="/submit">
+              <Link to="/home" color="inherit">
                 <Avatar alt="user-avatar" />
                 {/* {user.name} */}
-              </Button>
+              </Link>
             </div>
           )}
         </Toolbar>

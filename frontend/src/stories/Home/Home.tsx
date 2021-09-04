@@ -39,7 +39,7 @@ export const Home = (props: HomeProps) => {
 
   const quoteStyle = css({
     maxWidth: "70vw",
-    padding: "20px 0",
+    padding: "20px 10px",
     position: "absolute",
     bottom: "10vh",
     borderRadius: "10px",
