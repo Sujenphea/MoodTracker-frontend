@@ -24,6 +24,8 @@
     <None Remove="Microsoft.AspNet.WebApi.Client" />
     <None Remove="Microsoft.EntityFrameworkCore.Design" />
     <None Remove="Newtonsoft.Json" />
+    <None Remove="GraphQL.DataLoader" />
+    <None Remove="GraphQL\DataLoader\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="HotChocolate.Data.EntityFramework" Version="11.3.5" />
@@ -46,6 +48,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="GraphQL.DataLoader" Version="4.6.0" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\" />
@@ -53,5 +56,6 @@
     <Folder Include="GraphQL\" />
     <Folder Include="Extensions\" />
     <Folder Include="GraphQL\UserGraph\" />
+    <Folder Include="GraphQL\DataLoader\" />
   </ItemGroup>
 </Project>

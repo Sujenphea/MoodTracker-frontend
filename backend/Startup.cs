@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using MoodTracker.Data;
 using MoodTracker.GraphQL;
 using MoodTracker.GraphQL.DailyGraph;
+using MoodTracker.GraphQL.DataLoader;
 using MoodTracker.GraphQL.UserGraph;
 
 namespace MoodTracker
@@ -52,7 +53,11 @@ namespace MoodTracker
                 .AddTypeExtension<DailyMutations>()
                 .AddTypeExtension<UserMutations>()
             .AddType<DailyType>()
-            .AddType<UserType>();
+            .AddType<UserType>()
+            .AddDataLoader<UserByIdDataLoader>()
+            .AddDataLoader<DailiesByUserIdDataLoader>()
+            .AddDataLoader<DailyByIdDataLoader>();
+            
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]));
 

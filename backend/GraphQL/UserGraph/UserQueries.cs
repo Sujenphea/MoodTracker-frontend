@@ -7,6 +7,9 @@ using MoodTracker.Models;
 using MoodTracker.Extensions;
 using HotChocolate.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Threading;
+using MoodTracker.GraphQL.DataLoader;
+using System.Threading.Tasks;
 
 namespace MoodTracker.GraphQL
 {
@@ -20,10 +23,9 @@ namespace MoodTracker.GraphQL
             return context.Users;
         }
 
-        [UseAppDbContext]
-        public User GetUser(int id, [ScopedService] AppDbContext context)
+        public Task<User> GetUserAsync(int id, UserByIdDataLoader dataLoader, CancellationToken cancellationToken)
         {
-            return context.Users.Find(id);
+            return dataLoader.LoadAsync(id, cancellationToken);
         }
 
         [UseAppDbContext]
