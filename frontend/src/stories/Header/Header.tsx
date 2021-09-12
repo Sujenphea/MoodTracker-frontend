@@ -62,7 +62,8 @@ export const Header = (props: HeaderProps) => {
   const appBarStyle = css({
     backgroundColor: "transparent",
     boxShadow: isDarkMode ? "0 4px 2px -2px #444" : "0 4px 2px -2px #ddd",
-    height: "65px",
+    minHeight: "60px",
+    height: "7vh",
     justifyContent: "center",
   });
 

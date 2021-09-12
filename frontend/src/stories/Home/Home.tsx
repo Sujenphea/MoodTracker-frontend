@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import { SELF } from "../../api/queries";
 import { Self } from "../../api/__generated__/Self";
 import { useAppSelector } from "../../redux/hooks";
+import backgroundDark from "../../assets/backgroundDark.jpg";
+import backgroundLight from "../../assets/backgroundLight.jpg";
 
 export interface HomeProps {
   quote: string;
@@ -14,6 +16,16 @@ export interface HomeProps {
 export const Home = (props: HomeProps) => {
   const isDarkMode = useAppSelector((state) => state.darkMode.value);
   const { data } = useQuery<Self>(SELF);
+
+  const backgroundStyle = css({
+    backgroundImage: `url(${isDarkMode ? backgroundDark : backgroundLight})`,
+    backgroundSize: "cover",
+    backgroundRepeat: "no-repeat",
+    backgroundPosition: "center",
+    height: "93vh",
+    width: "100vw",
+    transition: "background 0.2s ease-in-out",
+  });
 
   const rootStyle = css({
     display: "flex",
@@ -53,14 +65,18 @@ export const Home = (props: HomeProps) => {
   });
 
   return (
-    <div css={rootStyle}>
-      <h1 css={titleStyle}>WELCOME {data?.self?.name?.toUpperCase() ?? ""}</h1>
-      <Link to="/Thoughts">
-        <h3>Ready to record your daily review?</h3>
-      </Link>
-      <p css={quoteStyle}>
-        "{props.quote.toUpperCase()}" - {props.author.toUpperCase()}
-      </p>
+    <div css={backgroundStyle}>
+      <div css={rootStyle}>
+        <h1 css={titleStyle}>
+          WELCOME {data?.self?.name?.toUpperCase() ?? ""}
+        </h1>
+        <Link to="/Thoughts">
+          <h3>Ready to record your daily review?</h3>
+        </Link>
+        <p css={quoteStyle}>
+          "{props.quote.toUpperCase()}" - {props.author.toUpperCase()}
+        </p>
+      </div>
     </div>
   );
 };
