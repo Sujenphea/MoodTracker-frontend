@@ -3,12 +3,12 @@ import { createStyles, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { DAILIESBYUSERID } from "../../api/queries";
-// import { DAILIESBYUSERID } from "../../api/queries";
 import {
   DailiesByUserId,
   DailiesByUserId_dailiesByUserId,
 } from "../../api/__generated__/DailiesByUserId";
 import { IsToday } from "../../helpers/Date";
+import { sortDailies } from "../../helpers/SortDailies";
 import { GridItem } from "../GridItem/GridItem";
 
 const useStyles = makeStyles(() =>
@@ -47,22 +47,6 @@ export const GridContainer = (props: GridContainerProps) => {
   });
 
   useEffect(() => {
-    console.log("user id", props.userId);
-  }, [props.userId]);
-
-  useEffect(() => {
-    console.log("dloading", dloading);
-  }, [dloading]);
-
-  useEffect(() => {
-    console.log("derror", derror);
-  }, [derror]);
-
-  useEffect(() => {
-    console.log("ddata", ddata);
-    if (ddata) {
-      console.log(ddata.dailiesByUserId);
-    }
     if (
       !ddata ||
       !ddata.dailiesByUserId ||
@@ -76,24 +60,24 @@ export const GridContainer = (props: GridContainerProps) => {
       return;
     }
 
-    if (IsToday(ddata.dailiesByUserId[0]!.dateCreated)) {
+    const sortedDailies = sortDailies(ddata.dailiesByUserId!);
+
+    if (IsToday(sortedDailies[0]!.dateCreated)) {
       setWrittenToday(true);
     }
 
     let res: JSX.Element[] = [];
 
-    ddata.dailiesByUserId.forEach(
-      (daily: DailiesByUserId_dailiesByUserId | null) => {
-        res = res.concat(
-          <GridItem
-            key={Number.parseInt(daily!.id)}
-            id={daily!.id}
-            description={daily!.description}
-            dateCreated={daily!.dateCreated}
-          />
-        );
-      }
-    );
+    sortedDailies.forEach((daily: DailiesByUserId_dailiesByUserId | null) => {
+      res = res.concat(
+        <GridItem
+          key={daily!.id}
+          id={daily!.id}
+          description={daily!.description}
+          dateCreated={daily!.dateCreated}
+        />
+      );
+    });
 
     setDailies(res);
   }, [ddata]);
