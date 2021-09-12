@@ -76,18 +76,18 @@ const Index = () => {
   }, [sdata]);
 
   // Get Quote from public API
-  // useEffect(() => {
-  //   fetch("https://localhost:5001/api/GetLogo")
-  //     .then((data) => {
-  //       return data.json();
-  //     })
-  //     .then((res) => {
-  //       setQuote(res);
-  //     })
-  //     .catch((err) => {
-  //       console.log("err", err);
-  //     });
-  // }, []);
+  useEffect(() => {
+    fetch("https://localhost:5001/api/GetLogo")
+      .then((data) => {
+        return data.json();
+      })
+      .then((res) => {
+        setQuote(res);
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  }, []);
 
   const darkModeToggleStyle = css({
     position: "absolute",
