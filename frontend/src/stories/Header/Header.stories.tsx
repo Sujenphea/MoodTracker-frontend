@@ -28,7 +28,7 @@ LoggedIn.args = {
     id: "1",
     name: "John Doe",
     gitHub: "johndoe",
-    // imageURI: "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
+    imageURI: "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
   },
 };
 

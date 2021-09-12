@@ -60,7 +60,7 @@ const Index = () => {
           const { data } = await login({ variables: { code } });
 
           if (data != null) {
-            localStorage.setItem("token", data.login.jwt);
+            localStorage.setItem("token", data.login ? data.login.jwt! : "");
           }
         } catch (e) {
           console.log(e);
@@ -71,19 +71,23 @@ const Index = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Get Quote from public API
   useEffect(() => {
-    fetch("https://localhost:5001/api/GetLogo")
-      .then((data) => {
-        return data.json();
-      })
-      .then((res) => {
-        setQuote(res);
-      })
-      .catch((err) => {
-        console.log("err", err);
-      });
-  }, []);
+    console.log("user self", sdata);
+  }, [sdata]);
+
+  // Get Quote from public API
+  // useEffect(() => {
+  //   fetch("https://localhost:5001/api/GetLogo")
+  //     .then((data) => {
+  //       return data.json();
+  //     })
+  //     .then((res) => {
+  //       setQuote(res);
+  //     })
+  //     .catch((err) => {
+  //       console.log("err", err);
+  //     });
+  // }, []);
 
   const darkModeToggleStyle = css({
     position: "absolute",
@@ -147,9 +151,7 @@ const Index = () => {
           <Route
             path="/thoughts"
             render={() => (
-              <GridContainer
-                userId={sdata ? Number.parseInt(sdata.self.id) : 1}
-              />
+              <GridContainer userId={sdata ? sdata.self!.id : ""} />
             )}
           />
         </Switch>

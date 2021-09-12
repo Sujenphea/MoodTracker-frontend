@@ -12,8 +12,9 @@ export interface Self_self {
   id: string;
   name: string;
   gitHub: string;
+  imageURI: string;
 }
 
 export interface Self {
-  self: Self_self;
+  self: Self_self | null;
 }

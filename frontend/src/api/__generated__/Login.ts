@@ -12,16 +12,17 @@ export interface Login_login_user {
   id: string;
   name: string;
   gitHub: string;
+  imageURI: string;
 }
 
 export interface Login_login {
   __typename: "LoginPayload";
-  user: Login_login_user;
-  jwt: string;
+  user: Login_login_user | null;
+  jwt: string | null;
 }
 
 export interface Login {
-  login: Login_login;
+  login: Login_login | null;
 }
 
 export interface LoginVariables {

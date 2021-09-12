@@ -54,7 +54,7 @@ export const Home = (props: HomeProps) => {
 
   return (
     <div css={rootStyle}>
-      <h1 css={titleStyle}>WELCOME {data?.self.name.toUpperCase() ?? ""}</h1>
+      <h1 css={titleStyle}>WELCOME {data?.self?.name?.toUpperCase() ?? ""}</h1>
       <Link to="/Thoughts">
         <h3>Ready to record your daily review?</h3>
       </Link>

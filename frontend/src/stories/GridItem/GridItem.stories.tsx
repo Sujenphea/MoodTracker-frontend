@@ -22,8 +22,8 @@ const Template: Story<GridItemProps> = (args) => (
 export const DailyGridItem = Template.bind({});
 
 DailyGridItem.args = {
-  id: 1,
-  summary: "hey hey",
+  id: "1",
+  description: "hey hey",
   dateCreated: "30.07.2020",
   isToday: false,
 };

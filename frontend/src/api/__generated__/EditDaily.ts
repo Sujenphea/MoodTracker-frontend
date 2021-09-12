@@ -10,15 +10,15 @@
 export interface EditDaily_editDaily {
   __typename: "Daily";
   id: string;
-  summary: string;
+  description: string;
   dateCreated: string;
 }
 
 export interface EditDaily {
-  editDaily: EditDaily_editDaily;
+  editDaily: EditDaily_editDaily | null;
 }
 
 export interface EditDailyVariables {
-  id: number;
-  summary?: string | null;
+  id: string;
+  description: string;
 }

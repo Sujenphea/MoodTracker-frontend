@@ -12,4 +12,5 @@ export interface userFields {
   id: string;
   name: string;
   gitHub: string;
+  imageURI: string;
 }

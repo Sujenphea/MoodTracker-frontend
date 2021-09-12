@@ -25,5 +25,5 @@ const Template: Story<GridContainerProps> = (args) => (
 export const DailyGridContainer = Template.bind({});
 
 DailyGridContainer.args = {
-  userId: 1,
+  userId: "1",
 };

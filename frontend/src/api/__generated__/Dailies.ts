@@ -7,29 +7,22 @@
 // GraphQL query operation: Dailies
 // ====================================================
 
-export interface Dailies_dailies_nodes_user {
+export interface Dailies_dailies_user {
   __typename: "User";
   id: string;
   name: string;
   gitHub: string;
-}
-
-export interface Dailies_dailies_nodes {
-  __typename: "Daily";
-  summary: string;
-  dateCreated: string;
-  id: string;
-  user: Dailies_dailies_nodes_user;
+  imageURI: string;
 }
 
 export interface Dailies_dailies {
-  __typename: "DailyConnection";
-  /**
-   * A flattened list of the nodes.
-   */
-  nodes: Dailies_dailies_nodes[] | null;
+  __typename: "Daily";
+  id: string;
+  description: string;
+  dateCreated: string;
+  user: Dailies_dailies_user;
 }
 
 export interface Dailies {
-  dailies: Dailies_dailies | null;
+  dailies: (Dailies_dailies | null)[] | null;
 }

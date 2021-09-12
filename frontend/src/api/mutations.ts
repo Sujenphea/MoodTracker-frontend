@@ -13,18 +13,18 @@ export const LOGIN = gql`
   ${fragments.USER}
 `;
 
-export const EDIT_SELF = gql`
-  mutation EditSelf($name: String) {
-    editSelf(input: { name: $name }) {
-      ...userFields
-    }
-  }
-  ${fragments.USER}
-`;
+// export const EDIT_SELF = gql`
+//   mutation EditSelf($name: String) {
+//     editSelf(input: { name: $name }) {
+//       ...userFields
+//     }
+//   }
+//   ${fragments.USER}
+// `;
 
 export const ADD_DAILY = gql`
-  mutation AddDaily($summary: String!) {
-    addDaily(input: { summary: $summary }) {
+  mutation AddDaily($description: String!) {
+    addDaily(input: { description: $description }) {
       ...dailyFields
     }
   }
@@ -32,8 +32,8 @@ export const ADD_DAILY = gql`
 `;
 
 export const EDIT_DAILY = gql`
-  mutation EditDaily($id: Int!, $summary: String) {
-    editDaily(input: { id: $id, summary: $summary }) {
+  mutation EditDaily($id: String!, $description: String!) {
+    editDaily(input: { id: $id, description: $description }) {
       ...dailyFields
     }
   }

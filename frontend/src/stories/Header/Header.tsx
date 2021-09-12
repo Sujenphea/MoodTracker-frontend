@@ -14,7 +14,7 @@ import { useAppSelector } from "../../redux/hooks";
 import { Link } from "react-router-dom";
 
 export interface HeaderProps {
-  user: Self_self | undefined;
+  user: Self_self | undefined | null;
 }
 
 const useStyles = makeStyles((theme: Theme) =>

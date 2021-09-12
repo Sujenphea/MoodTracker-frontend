@@ -10,14 +10,14 @@
 export interface AddDaily_addDaily {
   __typename: "Daily";
   id: string;
-  summary: string;
+  description: string;
   dateCreated: string;
 }
 
 export interface AddDaily {
-  addDaily: AddDaily_addDaily;
+  addDaily: AddDaily_addDaily | null;
 }
 
 export interface AddDailyVariables {
-  summary: string;
+  description: string;
 }

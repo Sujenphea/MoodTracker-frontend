@@ -10,6 +10,6 @@
 export interface dailyFields {
   __typename: "Daily";
   id: string;
-  summary: string;
+  description: string;
   dateCreated: string;
 }

@@ -11,8 +11,8 @@ import { AddDaily } from "../../api/__generated__/AddDaily";
 import { useAppSelector } from "../../redux/hooks";
 
 export interface GridItemProps {
-  id?: number;
-  summary?: string;
+  id?: string;
+  description?: string;
   dateCreated?: string;
   isEditing?: boolean;
   isToday?: boolean;
@@ -75,7 +75,7 @@ export const GridItem = (props: GridItemProps) => {
   const isDarkMode = useAppSelector((state) => state.darkMode.value);
 
   const [isEditing, setIsEditing] = useState(false);
-  const [currentText, setCurrentText] = useState(props.summary);
+  const [currentText, setCurrentText] = useState(props.description);
   const [editDaily] = useMutation<EditDaily>(EDIT_DAILY);
   const [addDaily] = useMutation<AddDaily>(ADD_DAILY);
 
@@ -93,7 +93,7 @@ export const GridItem = (props: GridItemProps) => {
     marginTop: "20px",
   });
 
-  const summaryStyle = css({
+  const descriptionStyle = css({
     color: isDarkMode
       ? "rgba(200, 200, 200, 0.88)"
       : "rgba(100, 100, 100, 0.7)",
@@ -112,15 +112,15 @@ export const GridItem = (props: GridItemProps) => {
   };
 
   const handleSubmit = async () => {
-    if (currentText === "" || currentText === props.summary) {
+    if (currentText === "" || currentText === props.description) {
       setIsEditing(false);
       return;
     }
 
-    if (props.isToday && props.summary === undefined) {
+    if (props.isToday && props.description === undefined) {
       addDaily({
         variables: {
-          summary: currentText,
+          description: currentText,
         },
       })
         .then(() => {
@@ -140,7 +140,7 @@ export const GridItem = (props: GridItemProps) => {
       editDaily({
         variables: {
           id: props.id,
-          summary: currentText,
+          description: currentText,
         },
       });
       console.log("submitting");
@@ -172,10 +172,10 @@ export const GridItem = (props: GridItemProps) => {
       </div>
       <div className={classes.textArea}>
         <Box
-          css={summaryStyle}
+          css={descriptionStyle}
           display={{ xs: "none", sm: "none", md: "block" }}
         >
-          summary
+          description
         </Box>
         {isEditing ? (
           <form>
@@ -187,7 +187,7 @@ export const GridItem = (props: GridItemProps) => {
               className={classes.textField}
               onInput={(v) => setCurrentText(v.currentTarget.textContent ?? "")}
             >
-              {props.summary}
+              {props.description}
             </span>
           </form>
         ) : (
