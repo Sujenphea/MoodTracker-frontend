@@ -72,16 +72,16 @@ const Index = () => {
   useEffect(() => {
     const loginMethod = async () => {
       const code = query.get("code");
-      if (code != null) {
-        try {
-          const { data } = await login({ variables: { code } });
 
-          if (data != null) {
-            localStorage.setItem("token", data.login ? data.login.jwt! : "");
-          }
-        } catch (e) {
-          console.log(e);
-        }
+      if (code == null) return;
+
+      try {
+        const { data } = await login({ variables: { code } });
+
+        if (data == null) return;
+        localStorage.setItem("token", data.login ? data.login.jwt! : "");
+      } catch (e) {
+        console.log(e);
       }
     };
     loginMethod();
