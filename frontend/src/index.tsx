@@ -31,6 +31,7 @@ import { useLocation } from "react-router-dom";
 import { LOGIN } from "./api/mutations";
 import { Login } from "./api/__generated__/Login";
 import { DailiesByUserId } from "./api/__generated__/DailiesByUserId";
+import { Loading } from "./stories/Loading/Loading";
 
 function useQueryCode() {
   return new URLSearchParams(useLocation().search);
@@ -157,31 +158,36 @@ const Index = () => {
             alt="dark mode toggle"
           ></img>
         </div>
-        <Switch>
-          <Route exact path="/">
-            <Redirect to="/home" />
-          </Route>
-          <Route
-            path="/home"
-            render={() => (
-              <Home
-                quote={quote?.quoteText ?? ""}
-                author={quote?.quoteAuthor ?? ""}
-              />
-            )}
-          />
-          <Route
-            path="/thoughts"
-            render={() => (
-              <GridContainer
-                dailies={ddata}
-                refetchData={() => {
-                  refetchDailies();
-                }}
-              />
-            )}
-          />
-        </Switch>
+        <div style={{ display: sloading ? "block" : "none" }}>
+          <Loading />
+        </div>
+        <div style={{ display: sloading ? "none" : "block" }}>
+          <Switch>
+            <Route exact path="/">
+              <Redirect to="/home" />
+            </Route>
+            <Route
+              path="/home"
+              render={() => (
+                <Home
+                  quote={quote?.quoteText ?? ""}
+                  author={quote?.quoteAuthor ?? ""}
+                />
+              )}
+            />
+            <Route
+              path="/thoughts"
+              render={() => (
+                <GridContainer
+                  dailies={ddata}
+                  refetchData={() => {
+                    refetchDailies();
+                  }}
+                />
+              )}
+            />
+          </Switch>
+        </div>
       </motion.div>
     </div>
   );
