@@ -12,7 +12,7 @@ import graphQLClient from "./GraphQLClient";
 
 import { css, jsx, Global } from "@emotion/react";
 import { Header } from "./stories/Header/Header";
-import { SELF } from "./api/queries";
+import { DAILIESBYUSERID, SELF } from "./api/queries";
 import { Self } from "./api/__generated__/Self";
 // import * as serviceWorker from "./../archive/serviceWorker";
 import "./styles/sanitise.css";
@@ -30,19 +30,35 @@ import { QuoteType } from "./helpers/Quote";
 import { useLocation } from "react-router-dom";
 import { LOGIN } from "./api/mutations";
 import { Login } from "./api/__generated__/Login";
+import { DailiesByUserId } from "./api/__generated__/DailiesByUserId";
 
 function useQueryCode() {
   return new URLSearchParams(useLocation().search);
 }
 
 const Index = () => {
+  // quote
+  const [quote, setQuote] = useState<QuoteType | undefined>(undefined);
+
+  // redux
   const isDarkMode = useAppSelector((state) => state.darkMode.value);
   const dispatch = useAppDispatch();
-  const [quote, setQuote] = useState<QuoteType | undefined>(undefined);
 
   // login
   const query = useQueryCode();
   const [login] = useMutation<Login>(LOGIN);
+  const [userId, setUserId] = useState("");
+
+  // dailies
+  const {
+    loading: dloading,
+    error: derror,
+    data: ddata,
+    refetch: refetchDailies,
+  } = useQuery<DailiesByUserId>(DAILIESBYUSERID, {
+    variables: { id: userId },
+  });
+  // const [dailies, setDailies] = useState<DailiesByUserId>();
 
   // user info
   const {
@@ -72,8 +88,14 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    console.log("user self", sdata);
+    setUserId(sdata ? sdata.self!.id : "");
   }, [sdata]);
+
+  // refetch dailies
+  useEffect(() => {
+    refetchDailies();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
   // Get Quote from public API
   useEffect(() => {
@@ -151,7 +173,12 @@ const Index = () => {
           <Route
             path="/thoughts"
             render={() => (
-              <GridContainer userId={sdata ? sdata.self!.id : ""} />
+              <GridContainer
+                dailies={ddata}
+                refetchData={() => {
+                  refetchDailies();
+                }}
+              />
             )}
           />
         </Switch>

@@ -1,8 +1,6 @@
-import { useQuery } from "@apollo/client";
 import { createStyles, makeStyles } from "@material-ui/core";
 import React, { useState } from "react";
 import { useEffect } from "react";
-import { DAILIESBYUSERID } from "../../api/queries";
 import {
   DailiesByUserId,
   DailiesByUserId_dailiesByUserId,
@@ -28,7 +26,8 @@ const useStyles = makeStyles(() =>
 );
 
 export interface GridContainerProps {
-  userId: string;
+  dailies: DailiesByUserId | undefined;
+  refetchData: () => void;
 }
 
 export const GridContainer = (props: GridContainerProps) => {
@@ -36,31 +35,16 @@ export const GridContainer = (props: GridContainerProps) => {
   const [dailies, setDailies] = useState<JSX.Element[]>([]);
   const classes = useStyles();
 
-  // get data
-  const {
-    loading: dloading,
-    error: derror,
-    data: ddata,
-    refetch,
-  } = useQuery<DailiesByUserId>(DAILIESBYUSERID, {
-    variables: { id: props.userId },
-  });
-
   useEffect(() => {
     if (
-      !ddata ||
-      !ddata.dailiesByUserId ||
-      !ddata.dailiesByUserId ||
-      ddata.dailiesByUserId == null
+      props.dailies === undefined ||
+      props.dailies.dailiesByUserId === null ||
+      props.dailies.dailiesByUserId!.length === 0
     ) {
       return;
     }
 
-    if (ddata.dailiesByUserId.length === 0) {
-      return;
-    }
-
-    const sortedDailies = sortDailies(ddata.dailiesByUserId!);
+    const sortedDailies = sortDailies(props.dailies!.dailiesByUserId!);
 
     if (IsToday(sortedDailies[0]!.dateCreated)) {
       setWrittenToday(true);
@@ -80,7 +64,7 @@ export const GridContainer = (props: GridContainerProps) => {
     });
 
     setDailies(res);
-  }, [ddata]);
+  }, [props.dailies]);
 
   return (
     <div className={classes.root}>
@@ -92,7 +76,7 @@ export const GridContainer = (props: GridContainerProps) => {
             isToday={true}
             isEditing={true}
             didSubmit={() => {
-              refetch();
+              props.refetchData();
             }}
           />
         </div>
