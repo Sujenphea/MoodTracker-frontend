@@ -1,9 +1,9 @@
 ﻿using System.Reflection;
-using MoodTracker.Data;
+using finalMoodTracker.Data;
 using HotChocolate.Types;
 using HotChocolate.Types.Descriptors;
 
-namespace MoodTracker.Extensions
+namespace finalMoodTracker.Extensions
 {
     public class UseAppDbContextAttribute : ObjectFieldDescriptorAttribute
     {

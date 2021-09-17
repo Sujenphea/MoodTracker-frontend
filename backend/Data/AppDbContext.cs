@@ -1,28 +1,38 @@
-﻿using System;
+﻿using finalMoodTracker.Models;
 using Microsoft.EntityFrameworkCore;
-using MoodTracker.Models;
+using Microsoft.Azure.Cosmos;
+using User = finalMoodTracker.Models.User;
+using System.Linq;
+using Microsoft.Azure.Cosmos.Linq;
+using System;
+using System.Collections.Generic;
+using finalMoodTracker.Extensions;
 
-namespace MoodTracker.Data
+namespace finalMoodTracker.Data
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions options): base(options)
-        {}
+        public AppDbContext(DbContextOptions options) : base(options) {
+            this.Database.EnsureCreated();
+        }
+        
+        public DbSet<User> Users { get; set; } = default!;
+        public DbSet<Daily> Dailies { get; set; } = default!;
 
-        public DbSet<Daily> Dailies { get; set; } = null!;
-        public DbSet<User> Users { get; set; } = null!;
+        ////https://stackoverflow.com/questions/48743165/toarrayasync-throws-the-source-iqueryable-doesnt-implement-iasyncenumerable
+        //public IQueryable<User>? Users { get; set; } = new AsyncEnumerableQuery<User>(Enumerable.Empty<User>());
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<Daily>()
-            //    //.HasKey(d => d.Id)
-            //    .HasOne(d => d.User)
-            //    .WithMany(u => u.Dailies)
-            //    .HasForeignKey(d => d.UserId);
+            modelBuilder.HasDefaultContainer("users");
+
             modelBuilder.Entity<User>()
-                .HasMany(u => u.Dailies)
-                .WithOne(d => d.User)
-                .HasForeignKey(u => u.UserId);
+                .ToContainer<User>("users")
+                .HasPartitionKey(o => o.Name);
+
+            modelBuilder.Entity<Daily>()
+                .ToContainer<Daily>("dailies")
+                .HasPartitionKey(o => o.UserId);
         }
     }
 }

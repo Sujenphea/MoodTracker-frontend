@@ -5,7 +5,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
-namespace MoodTracker.Controllers
+namespace finalMoodTracker.Controllers
 {
     [Route("api")]
     [ApiController]

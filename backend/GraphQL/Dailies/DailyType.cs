@@ -1,22 +1,23 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using HotChocolate;
-using HotChocolate.Types;
-using MoodTracker.Data;
-using MoodTracker.Models;
-using MoodTracker.GraphQL;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using finalMoodTracker.Data;
+using finalMoodTracker.GraphQL.Users;
+using finalMoodTracker.Models;
+using HotChocolate;
+using HotChocolate.Types;
 using Microsoft.EntityFrameworkCore;
 
-namespace MoodTracker.GraphQL.DailyGraph
+namespace finalMoodTracker.GraphQL.Dailies
 {
     public class DailyType : ObjectType<Daily>
     {
         protected override void Configure(IObjectTypeDescriptor<Daily> descriptor)
         {
             descriptor.Field(s => s.Id).Type<NonNullType<IdType>>();
-            descriptor.Field(s => s.Summary).Type<NonNullType<StringType>>();
+            descriptor.Field(s => s.Description).Type<NonNullType<StringType>>();
             descriptor.Field(s => s.DateCreated).Type<NonNullType<StringType>>();
 
             descriptor

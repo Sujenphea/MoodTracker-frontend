@@ -1,24 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using finalMoodTracker.Data;
+using finalMoodTracker.GraphQL.Dailies;
+using finalMoodTracker.Models;
 using HotChocolate;
 using HotChocolate.Types;
-using MoodTracker.Data;
-using MoodTracker.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using MoodTracker.GraphQL.DailyGraph;
 
-namespace MoodTracker.GraphQL
+namespace finalMoodTracker.GraphQL.Users
 {
     public class UserType : ObjectType<User>
     {
         protected override void Configure(IObjectTypeDescriptor<User> descriptor)
         {
+            descriptor.Field(s => s.Id).Type<IdType>();
             descriptor.Field(s => s.Id).Type<NonNullType<IdType>>();
             descriptor.Field(s => s.Name).Type<NonNullType<StringType>>();
             descriptor.Field(s => s.GitHub).Type<NonNullType<StringType>>();
+            descriptor.Field(s => s.ImageURI).Type<NonNullType<StringType>>();
 
             descriptor
                 .Field(s => s.Dailies)

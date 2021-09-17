@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:2286",
-      "sslPort": 44329
+      "applicationUrl": "http://localhost:12736",
+      "sslPort": 44348
     }
   },
   "profiles": {
@@ -15,10 +15,11 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "MoodTracker": {
+    "finalMoodTracker": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,
+      "launchUrl": "graphql",
       "applicationUrl": "https://localhost:5001;http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

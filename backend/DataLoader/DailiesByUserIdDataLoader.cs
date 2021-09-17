@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 using GreenDonut;
 using HotChocolate.DataLoader;
 using Microsoft.EntityFrameworkCore;
-using MoodTracker.Data;
-using MoodTracker.Models;
+using finalMoodTracker.Data;
+using finalMoodTracker.Models;
 
-namespace MoodTracker.GraphQL.DataLoader
+namespace finalMoodTracker.GraphQL.DataLoader
 {
-    public class DailiesByUserIdDataLoader: GroupedDataLoader<int, Daily>
+    public class DailiesByUserIdDataLoader: GroupedDataLoader<string, Daily>
     {
         private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
 
@@ -22,11 +22,11 @@ namespace MoodTracker.GraphQL.DataLoader
                 throw new ArgumentNullException(nameof(dbContextFactory));
         }
 
-        protected override async Task<ILookup<int, Daily>> LoadGroupedBatchAsync(IReadOnlyList<int> keys, CancellationToken cancellationToken)
+        protected override async Task<ILookup<string, Daily>> LoadGroupedBatchAsync(IReadOnlyList<string> keys, CancellationToken cancellationToken)
         {
             await using AppDbContext dbContext = _dbContextFactory.CreateDbContext();
 
-            var x = await dbContext.Dailies.OrderByDescending(s => s.DateCreated.Substring(6, 10)).ThenByDescending(s => s.DateCreated.Substring(3, 5)).ThenByDescending(s => s.DateCreated.Substring(0, 2)).ToListAsync();
+            var x = await dbContext.Dailies.ToListAsync();
 
             return x.ToLookup(x => x.UserId);
         }

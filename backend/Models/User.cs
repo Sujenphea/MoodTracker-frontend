@@ -1,25 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
-namespace MoodTracker.Models
+namespace finalMoodTracker.Models
 {
     public class User
     {
         [Key]
-        public int Id { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
-        [Required]
-        public string? Name { get; set; }
+        [JsonProperty(PropertyName = "name")]
+        public string Name { get; set; }
 
-        [Required]
-        public string? GitHub { get; set; }
+        [JsonProperty(PropertyName = "gitHub")]
+        public string GitHub { get; set; }
 
+        [JsonProperty(PropertyName = "imageURI")]
+        public string ImageURI { get; set; }
+
+        [Newtonsoft.Json.JsonIgnore]
         public ICollection<Daily> Dailies { get; set; } = new List<Daily>();
-
-        public static implicit operator Octokit.User(User v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

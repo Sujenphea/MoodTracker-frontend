@@ -1,41 +1,53 @@
 ﻿using System;
-using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using HotChocolate;
 using HotChocolate.Types;
-using MoodTracker.Models;
-using MoodTracker.Data;
-using MoodTracker.Extensions;
+using Microsoft.Azure.Cosmos;
+using finalMoodTracker.Data;
+using finalMoodTracker.Extensions;
+using finalMoodTracker.Models;
+using User = finalMoodTracker.Models.User;
 using Octokit;
+using System.Threading;
 using HotChocolate.AspNetCore;
-using User = MoodTracker.Models.User;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.Collections.Generic;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using HotChocolate.AspNetCore.Authorization;
-using System.Linq;
 
-namespace MoodTracker.GraphQL.UserGraph
+namespace finalMoodTracker.GraphQL.Users
 {
+    // have to be async
+    // https://www.thereformedprogrammer.net/an-in-depth-study-of-cosmos-db-and-ef-core-3-0-database-provider/
     [ExtendObjectType(name: "Mutation")]
     public class UserMutations
     {
         [UseAppDbContext]
-        [Authorize]
-        public async Task<User> EditSelfAsync(EditSelfInput input, ClaimsPrincipal claimsPrincipal,
-        [ScopedService] AppDbContext context, CancellationToken cancellationToken)
+        public async Task<User> AddUser(UserInput input, [ScopedService] AppDbContext context)
         {
-            var userIdStr = claimsPrincipal.Claims.First(c => c.Type == "userId").Value;
-            var user = await context.Users.FindAsync(int.Parse(userIdStr), cancellationToken);
+            // unique id otherwise will take the first item
+            var u = new User
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = input.name,
+                GitHub = input.gitHub,
+                ImageURI = input.imageURI
+            };
 
-            user.Name = input.Name ?? user.Name;
+            //await context.AddAsync(u);
+            await context.Users.AddAsync(u);
+            await context.SaveChangesAsync();
 
-            await context.SaveChangesAsync(cancellationToken);
+            return u;
+        }
 
-            return user;
+        [UseAppDbContext]
+        public void EditUser(UserInput input, [ScopedService] AppDbContext context)
+        {
+            Console.WriteLine("oi");
         }
 
         [UseAppDbContext]
@@ -43,7 +55,7 @@ namespace MoodTracker.GraphQL.UserGraph
         {
             var client = new GitHubClient(new ProductHeaderValue("MSA-Yearbook"));
 
-            var request = new OauthTokenRequest(Startup.Configuration["Github:ClientId"], Startup.Configuration["Github:ClientSecret"], input.Code);
+            var request = new OauthTokenRequest(Startup.Configuration["Github:ClientId"], Startup.Configuration["Github:ClientSecret"], input.code);
             var tokenInfo = await client.Oauth.CreateAccessToken(request);
 
             if (tokenInfo.AccessToken == null)
@@ -62,8 +74,10 @@ namespace MoodTracker.GraphQL.UserGraph
             {
                 user = new User
                 {
+                    Id = Guid.NewGuid().ToString(),
                     Name = userClient.Name ?? userClient.Login,
                     GitHub = userClient.Login,
+                    ImageURI = userClient.AvatarUrl
                 };
 
                 context.Users.Add(user);
@@ -74,7 +88,7 @@ namespace MoodTracker.GraphQL.UserGraph
             var credentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>{
-                new Claim("userId", user.Id.ToString()),
+                new Claim("userId", user.Id),
             };
 
             var jwtToken = new JwtSecurityToken(
@@ -89,4 +103,8 @@ namespace MoodTracker.GraphQL.UserGraph
             return new LoginPayload(user, token);
         }
     }
+
+    public record UserInput(string name, string gitHub, string imageURI);
+    public record LoginInput(string code);
+    public record LoginPayload(User user, string jwt);
 }

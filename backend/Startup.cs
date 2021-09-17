@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using finalMoodTracker.GraphQL.Users;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -11,14 +10,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using finalMoodTracker.Data;
+using finalMoodTracker.GraphQL.Dailies;
 using Microsoft.IdentityModel.Tokens;
-using MoodTracker.Data;
-using MoodTracker.GraphQL;
-using MoodTracker.GraphQL.DailyGraph;
-using MoodTracker.GraphQL.DataLoader;
-using MoodTracker.GraphQL.UserGraph;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using finalMoodTracker.GraphQL.DataLoader;
 
-namespace MoodTracker
+namespace finalMoodTracker
 {
     public class Startup
     {
@@ -41,23 +40,25 @@ namespace MoodTracker
 
             services.AddControllers();
 
-            services.AddPooledDbContextFactory<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            var connectionString = "AccountEndpoint=https://moodtracker.documents.azure.com:443/;AccountKey=7bQ6dhl6Te9y35yOVjQQnYT6BN62UTZSeOTGuqRBYsonjtpQPCDuh1CboKw3j1qG7TbNnIyFAacZ48kZAatYuw==;";
+            services.AddPooledDbContextFactory<AppDbContext>(options => options.UseCosmos(connectionString, "moodtracker"));
+
             services.AddAuthorization();
+
             services
-            .AddGraphQLServer()
-            .AddAuthorization()
-            .AddQueryType(d => d.Name("Query"))
-                .AddTypeExtension<DailyQueries>()
-                .AddTypeExtension<UserQueries>()
-            .AddMutationType(d => d.Name("Mutation"))
-                .AddTypeExtension<DailyMutations>()
-                .AddTypeExtension<UserMutations>()
-            .AddType<DailyType>()
-            .AddType<UserType>()
-            .AddDataLoader<UserByIdDataLoader>()
-            .AddDataLoader<DailiesByUserIdDataLoader>()
-            .AddDataLoader<DailyByIdDataLoader>();
-            
+                .AddGraphQLServer()
+                .AddAuthorization()
+                .AddQueryType(d => d.Name("Query"))
+                    .AddTypeExtension<UserQueries>()
+                    .AddTypeExtension<DailyQueries>()
+                .AddMutationType(d => d.Name("Mutation"))
+                    .AddTypeExtension<UserMutations>()
+                    .AddTypeExtension<DailyMutations>()
+                .AddType<UserType>()
+                .AddType<DailyType>()
+                .AddDataLoader<DailiesByUserIdDataLoader>()
+                ;
+
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]));
 
@@ -73,8 +74,6 @@ namespace MoodTracker
                             IssuerSigningKey = signingKey
                         };
                 });
-
-            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,8 +83,8 @@ namespace MoodTracker
             {
                 app.UseDeveloperExceptionPage();
             }
+
             //app.UseHttpsRedirection();
-            //app.UseStaticFiles();
             app.UseCors("MyPolicy");
 
             app.UseRouting();

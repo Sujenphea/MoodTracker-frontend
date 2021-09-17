@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using HotChocolate.Types;
 
-namespace MoodTracker.Data
+namespace finalMoodTracker.Data
 {
     public static class ObjectFieldDescriptorExtensions
     {

@@ -1,21 +1,26 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
+using Newtonsoft.Json;
 
-namespace MoodTracker.Models
+namespace finalMoodTracker.Models
 {
     public class Daily
     {
         [Key]
-        public int Id { get; set; }
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
 
-        [Required]
-        public string Summary { get; set; } = null!;
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
 
-        [Required]
-        public int UserId { get; set; }
+        [JsonProperty(PropertyName = "dateCreated")]
+        public string DateCreated { get; set; }
 
+        [JsonProperty(PropertyName = "userId")]
+        public string UserId { get; set; }
+
+        [Newtonsoft.Json.JsonIgnore]
         public User User { get; set; } = null!;
-
-        public string? DateCreated { get; set; }
     }
 }
