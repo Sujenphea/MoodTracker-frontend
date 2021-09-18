@@ -3,7 +3,7 @@ import { setContext } from "@apollo/client/link/context";
 import https from "https";
 
 const httpLink = createHttpLink({
-  uri: "http://localhost:5000/graphql",
+  uri: "https://moodtracker-cosmos-backend.azurewebsites.net/graphql",
   fetchOptions: {
     agent: new https.Agent({ rejectUnauthorized: false }),
   },

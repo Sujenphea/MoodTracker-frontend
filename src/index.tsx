@@ -100,7 +100,7 @@ const Index = () => {
 
   // Get Quote from public API
   useEffect(() => {
-    fetch("https://localhost:5001/api/GetLogo")
+    fetch("https://moodtracker-cosmos-backend.azurewebsites.net/api/GetQuote")
       .then((data) => {
         return data.json();
       })
