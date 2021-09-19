@@ -1,9 +1,5 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
-import { useQuery } from "@apollo/client";
-import { Link } from "react-router-dom";
-import { SELF } from "../../api/queries";
-import { Self } from "../../api/__generated__/Self";
 import { useAppSelector } from "../../redux/hooks";
 import backgroundDark from "../../assets/backgroundDark.jpg";
 import backgroundLight from "../../assets/backgroundLight.jpg";

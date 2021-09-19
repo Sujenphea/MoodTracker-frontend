@@ -7,13 +7,6 @@ import { store } from "../../redux/store";
 export default {
   title: "UI Components/GridContainer",
   component: GridContainer,
-  // decorators: [
-  //   (Story) => (
-  //     <MemoryRouter>
-  //       <Story />
-  //     </MemoryRouter>
-  //   ),
-  // ],
 } as Meta;
 
 const Template: Story<GridContainerProps> = (args) => (

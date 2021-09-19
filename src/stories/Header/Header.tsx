@@ -1,13 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-import {
-  AppBar,
-  Avatar,
-  IconButton,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
+import { AppBar, Avatar, Toolbar } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { Self_self } from "../../api/__generated__/Self";
 import { useAppSelector } from "../../redux/hooks";
@@ -49,13 +43,6 @@ const CLIENT_ID = "9c00f9b1edf177359d2d";
 export const Header = (props: HeaderProps) => {
   const isDarkMode = useAppSelector((state) => state.darkMode.value);
   const classes = useStyles();
-
-  const titleStyle = css({
-    display: "flex",
-    flexGrow: 1,
-    marginRight: "200px",
-    color: isDarkMode ? "rgba(255, 255, 255, 0.88)" : "rgba(70, 70, 70, 0.87)",
-  });
 
   const buttonStyle = css({
     color: isDarkMode ? "rgba(255, 255, 255, 0.88)" : "rgba(70, 70, 70, 0.87)",
