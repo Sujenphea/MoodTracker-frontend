@@ -12,6 +12,8 @@ import Button from "@material-ui/core/Button";
 import { Self_self } from "../../api/__generated__/Self";
 import { useAppSelector } from "../../redux/hooks";
 import { Link } from "react-router-dom";
+import moodifulDark from "../../assets/moodiful_dark.png";
+import moodifulLight from "../../assets/moodiful_light.png";
 
 export interface HeaderProps {
   user: Self_self | undefined | null;
@@ -72,9 +74,11 @@ export const Header = (props: HeaderProps) => {
       <AppBar css={appBarStyle} position="static">
         <Toolbar className={classes.toolBar}>
           <Link to="/home">
-            <Typography css={titleStyle} variant="h5" noWrap>
-              Moodiful
-            </Typography>
+            <img
+              src={isDarkMode ? moodifulLight : moodifulDark}
+              alt="logo"
+              css={{ height: "40px" }}
+            />
           </Link>
 
           {props.user == null ? (
