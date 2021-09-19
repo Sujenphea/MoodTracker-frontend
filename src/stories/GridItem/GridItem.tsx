@@ -91,6 +91,7 @@ export const GridItem = (props: GridItemProps) => {
     minHeight: "200px",
     padding: "0px 20px",
     marginTop: "20px",
+    marginBottom: "20px",
   });
 
   const descriptionStyle = css({

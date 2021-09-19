@@ -1,5 +1,4 @@
 import React from "react";
-import { IconButton } from "@material-ui/core";
 
 export interface SocialIconProps {
   name: string;
@@ -13,8 +12,8 @@ export const FooterSocialIcon: React.FC<SocialIconProps> = ({
   logo,
 }) => {
   return (
-    <IconButton href={url}>
-      <img src={logo} id={logo} height="20px" alt={name} />
-    </IconButton>
+    <a href={url}>
+      <img src={logo} id={logo} height="18px" alt={name} />
+    </a>
   );
 };

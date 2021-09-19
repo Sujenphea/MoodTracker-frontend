@@ -9,9 +9,7 @@ export default {
 } as Meta;
 
 const Template: Story<SocialIconProps> = (args) => (
-  <div style={{ backgroundColor: "black" }}>
-    <FooterSocialIcon {...args} />
-  </div>
+  <FooterSocialIcon {...args} />
 );
 
 export const GithubIcon = Template.bind({});

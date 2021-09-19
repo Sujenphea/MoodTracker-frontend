@@ -33,6 +33,7 @@ import { Login } from "./api/__generated__/Login";
 import { DailiesByUserId } from "./api/__generated__/DailiesByUserId";
 import { Loading } from "./stories/Loading/Loading";
 import { TransitionGroup, CSSTransition } from "react-transition-group";
+import { Footer } from "./stories/Footer/Footer";
 
 function useQueryCode() {
   return new URLSearchParams(useLocation().search);
@@ -191,10 +192,14 @@ const Index = () => {
                     />
                   }
                 />
+                <Route path="*">
+                  <Redirect to="/home" />
+                </Route>
               </Switch>
             </CSSTransition>
           </TransitionGroup>
         </div>
+        <Footer />
       </motion.div>
     </div>
   );

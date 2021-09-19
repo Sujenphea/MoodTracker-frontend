@@ -60,11 +60,11 @@ export const Header = (props: HeaderProps) => {
   });
 
   const appBarStyle = css({
-    backgroundColor: "transparent",
     boxShadow: isDarkMode ? "0 4px 2px -2px #444" : "0 4px 2px -2px #ddd",
     minHeight: "60px",
     height: "7vh",
     justifyContent: "center",
+    backgroundColor: isDarkMode ? "#121212" : "#f0f0f0",
   });
 
   return (
@@ -87,8 +87,11 @@ export const Header = (props: HeaderProps) => {
           ) : (
             <div className={classes.userInformation}>
               <Link to="/home" color="inherit">
-                <Avatar alt="user-avatar" />
-                {/* {user.name} */}
+                <Avatar
+                  alt="user-avatar"
+                  src={props.user!.imageURI}
+                  css={{ size: "20px" }}
+                />
               </Link>
             </div>
           )}
