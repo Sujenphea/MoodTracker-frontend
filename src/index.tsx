@@ -32,6 +32,7 @@ import { LOGIN } from "./api/mutations";
 import { Login } from "./api/__generated__/Login";
 import { DailiesByUserId } from "./api/__generated__/DailiesByUserId";
 import { Loading } from "./stories/Loading/Loading";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 function useQueryCode() {
   return new URLSearchParams(useLocation().search);
@@ -49,6 +50,8 @@ const Index = () => {
   const query = useQueryCode();
   const [login] = useMutation<Login>(LOGIN);
   const [userId, setUserId] = useState("");
+
+  let location = useLocation();
 
   // dailies
   const {
@@ -162,31 +165,35 @@ const Index = () => {
           <Loading />
         </div>
         <div style={{ display: sloading ? "none" : "block" }}>
-          <Switch>
-            <Route exact path="/">
-              <Redirect to="/home" />
-            </Route>
-            <Route
-              path="/home"
-              render={() => (
-                <Home
-                  quote={quote?.quoteText ?? ""}
-                  author={quote?.quoteAuthor ?? ""}
+          <TransitionGroup>
+            <CSSTransition key={location.key} classNames="fade" timeout={300}>
+              <Switch location={location}>
+                <Route exact path="/">
+                  <Redirect to="/home" />
+                </Route>
+                <Route
+                  path="/home"
+                  children={
+                    <Home
+                      quote={quote?.quoteText ?? ""}
+                      author={quote?.quoteAuthor ?? ""}
+                    />
+                  }
                 />
-              )}
-            />
-            <Route
-              path="/thoughts"
-              render={() => (
-                <GridContainer
-                  dailies={ddata}
-                  refetchData={() => {
-                    refetchDailies();
-                  }}
+                <Route
+                  path="/thoughts"
+                  children={
+                    <GridContainer
+                      dailies={ddata}
+                      refetchData={() => {
+                        refetchDailies();
+                      }}
+                    />
+                  }
                 />
-              )}
-            />
-          </Switch>
+              </Switch>
+            </CSSTransition>
+          </TransitionGroup>
         </div>
       </motion.div>
     </div>
